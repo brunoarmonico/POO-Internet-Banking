@@ -1,0 +1,13 @@
+-sincronização de arquivos
+-sistema de hardware
+-loja de jogos
+-comparativos?
+-caixa eletronico
+-gerenciamento de gastos
+
+-Interatividade do sistema
+-Qualidade visual do sistema
+-Qualidade do código (uso de funções, e boas técnicas de desenvolvimento)
+-Complexidade do sistema (uso de tecnologias como Swing e/ou Java FX, JDBC, Padrões de Projetos, e outras)
+-Quantidade de Linhas de código
+-Criatividade
