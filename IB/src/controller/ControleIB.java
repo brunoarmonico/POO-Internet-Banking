@@ -1,14 +1,16 @@
 package controller;
 
+import model.Conta;
+
 public class ControleIB {
 
 	public void criarConta() {
 		
 	}
 	
-	public boolean acessoConta() {
+	public boolean acessoConta(Conta dados) {
 		
-		return true;
+		return false;
 	}
 	
 	public void verExtrato() {
@@ -22,5 +24,4 @@ public class ControleIB {
 	public void pagarConta() {
 		
 	}
-	
 }
