@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.text.NumberFormatter;
 
 import controller.ControleIB;
@@ -30,6 +33,8 @@ public class TelaPrincipal implements ActionListener {
 	private JPanel telaCadastro;
 	private JPanel telaEscolha;
 	private JPanel telaTransferencia;
+	private JPanel telaPagamento;
+	private JPanel telaRecarga;
 	private ControleIB controle = new ControleIB();
 	private JTextField login;
 	private JPasswordField senha;
@@ -37,6 +42,21 @@ public class TelaPrincipal implements ActionListener {
 
 	public static void main(String[] args) {
 		janela = new JFrame("Banco do HUE");
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		tela.telaLogin();
 		janela.setVisible(true);
 		janela.setResizable(false);
@@ -168,53 +188,93 @@ public class TelaPrincipal implements ActionListener {
 	}
 
 	public void telaEscolha() {
-		telaEscolha = new JPanel(new GridLayout(3,1));
+		telaEscolha = new JPanel(new BorderLayout());
+		
+		int btnX = 130;
+		int btnY = 40;
 
 		JLabel titulo = new JLabel("Bem vindo ao banco HUE");
 		titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
 		JPanel painelTitulo = new JPanel();
 		painelTitulo.add(titulo);
 
+		Font fonteTexto = new Font("Segoe UI", Font.PLAIN, 12);
+		
 		JPanel painelGeral = new JPanel(new GridLayout(1,4));
-		JPanel painelTransferencia = new JPanel(new GridLayout(2,1));
+		
+		JPanel painelTransferencia = new JPanel(new GridLayout(9,1));
 		JButton btnTranferencia = new JButton("Transferencia");
-		JLabel lbTransferencia = new JLabel("Transferencia DOC ou TED \nentre contas HUE ou outros bancos");
-		painelTransferencia.add(btnTranferencia);
+		btnTranferencia.setPreferredSize(new Dimension(btnX,btnY));
+		btnTranferencia.setFont(fonteTexto);
+		JPanel botao1 = new JPanel();
+		botao1.add(btnTranferencia);
+		JLabel lbTransferencia = new JLabel();
+				lbTransferencia.setText("<html><center>Transferencia DOC ou TED entre contas HUE ou outros bancos</html>");
+				lbTransferencia.setFont(fonteTexto);
+		painelTransferencia.add(new JPanel());
+		painelTransferencia.add(new JPanel());
+		painelTransferencia.add(new JPanel());
+		painelTransferencia.add(botao1);
 		painelTransferencia.add(lbTransferencia);
 		
-		JPanel painelExtrato = new JPanel(new GridLayout(2,1));
+		JPanel painelExtrato = new JPanel(new GridLayout(9,1));
 		JButton btnExtrato = new JButton("Extrato");
-		JLabel lbExtrato = new JLabel("Extrato de suas movimentações da conta");
-		painelExtrato.add(btnExtrato);
+		btnExtrato.setPreferredSize(new Dimension(btnX,btnY));
+		btnExtrato.setFont(fonteTexto);
+		JPanel botao2 = new JPanel();
+		botao2.add(btnExtrato);
+		JLabel lbExtrato = new JLabel();
+		lbExtrato.setText("<html><center>Extrato de suas movimentações da conta</html>");
+		lbExtrato.setFont(fonteTexto);
+		painelExtrato.add(new JPanel());
+		painelExtrato.add(new JPanel());
+		painelExtrato.add(new JPanel());
+		painelExtrato.add(botao2);
 		painelExtrato.add(lbExtrato);
 
-		JPanel painelPagamento = new JPanel(new GridLayout(2,1));
+		JPanel painelPagamento = new JPanel(new GridLayout(9,1));
 		JButton btnPagamento = new JButton("Pagamento");
-		JLabel lbPagamento = new JLabel("Pagamentos por codigo de barra");
-		painelPagamento.add(btnPagamento);
+		btnPagamento.setPreferredSize(new Dimension(btnX,btnY));
+		btnPagamento.setFont(fonteTexto);
+		JPanel botao3 = new JPanel();
+		botao3.add(btnPagamento);
+		JLabel lbPagamento = new JLabel();
+		lbPagamento.setText("<html><center>Pagamentos por codigo de barra</html>");
+		lbPagamento.setFont(fonteTexto);
+		painelPagamento.add(new JPanel());
+		painelPagamento.add(new JPanel());
+		painelPagamento.add(new JPanel());
+		painelPagamento.add(botao3);
 		painelPagamento.add(lbPagamento);
 		
-		JPanel painelDeposito = new JPanel(new GridLayout(2,1));
-		JButton btnDeposito = new JButton("Recarga");
-		JLabel lbDeposito = new JLabel("Recarga pré pago");
-		painelDeposito.add(btnDeposito);
-		painelDeposito.add(lbDeposito);
-		
-		
-		JPanel painelInferior = new JPanel();
-		JButton btnSair = new JButton("Sair");
-		painelInferior.add(btnSair);
-		btnSair.addActionListener(this);
+		JPanel painelRecarga = new JPanel(new GridLayout(9,1));
+		JButton btnRecarga = new JButton("Recarga");
+		btnRecarga.setPreferredSize(new Dimension(btnX,btnY));
+		btnRecarga.setFont(fonteTexto);
+		JPanel botao4 = new JPanel();
+		botao4.add(btnRecarga);
+		JLabel lbRecarga = new JLabel();
+		lbRecarga.setText("<html><center>Recarga pré pago</html>");
+		lbRecarga.setFont(fonteTexto);
+		painelRecarga.add(new JPanel());
+		painelRecarga.add(new JPanel());
+		painelRecarga.add(new JPanel());
+		painelRecarga.add(botao4);
+		painelRecarga.add(lbRecarga);
 		
 		btnTranferencia.addActionListener(this);
+		btnPagamento.addActionListener(this);
+		btnRecarga.addActionListener(this);
+		btnExtrato.addActionListener(this);
 
 		painelGeral.add(painelTransferencia);
 		painelGeral.add(painelExtrato);
 		painelGeral.add(painelPagamento);
-		painelGeral.add(painelDeposito);
+		painelGeral.add(painelRecarga);
 		
-		telaEscolha.add(painelTitulo);
-		telaEscolha.add(painelGeral);
+		
+		telaEscolha.add(painelSuperior(), BorderLayout.NORTH);
+		telaEscolha.add(painelGeral, BorderLayout.CENTER);
 	}
 	
 	public void telaTransferencia() {
@@ -274,10 +334,11 @@ public class TelaPrincipal implements ActionListener {
 		painelValor.add(valor);
 		
 		JButton btnTransferir = new JButton("Transferir");
-		JButton btnCancelar = new JButton("Cancelar");
+		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
 		JPanel painelBotao = new JPanel();
 		painelBotao.add(btnTransferir);
 		painelBotao.add(btnCancelar);
+		btnCancelar.addActionListener(this);
 		
 		dadosTransferencia.add(painelBanco);
 		dadosTransferencia.add(painelAgenciaConta);
@@ -295,17 +356,132 @@ public class TelaPrincipal implements ActionListener {
 	}
 	
 	public void telaPagamento() {
+		telaPagamento = new JPanel(new BorderLayout());
 		
+		JPanel paineis = new JPanel(new GridLayout(4,1));
+		JLabel lbCodigo = new JLabel("Codigo de barras: ");
+		JTextField codigoBarras = new JTextField(30);
+		JPanel painelCodigo = new JPanel();
+		painelCodigo.add(lbCodigo);
+		painelCodigo.add(codigoBarras);
+		
+		JLabel lbPagamento = new JLabel("Valor do Pagamento: ");
+		JTextField valorPagamento = new JTextField(10);
+		JPanel painelPagamento = new JPanel();
+		painelPagamento.add(lbPagamento);
+		painelPagamento.add(valorPagamento);
+		
+		JLabel lbIdent = new JLabel("Identificação: ");
+		JTextArea identificacao = new JTextArea(4,20);
+		JPanel painelIden = new JPanel();
+		painelIden.add(lbIdent);
+		painelIden.add(identificacao);
+		
+		JButton btnPagar = new JButton("Pagar");
+		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
+		JPanel painelBotao = new JPanel();
+		painelBotao.add(btnPagar);
+		painelBotao.add(btnCancelar);
+		
+		paineis.add(painelCodigo);
+		paineis.add(painelPagamento);
+		paineis.add(painelIden);
+		paineis.add(painelBotao);
+		
+		btnCancelar.addActionListener(this);
+		
+		telaPagamento.add(painelSuperior(), BorderLayout.NORTH);
+		telaPagamento.add(paineis, BorderLayout.CENTER);
+	}
+	
+	public void telaRecarga() {
+		telaRecarga = new JPanel(new BorderLayout());
+		
+		JPanel paineis = new JPanel(new GridLayout(4,1));
+		
+		JPanel painelTel = new JPanel ();
+		JLabel lbTelefone = new JLabel("DDD e Telefone: ");
+		JTextField ddd = new JTextField(2);
+		JTextField telefone = new JTextField(8);
+		painelTel.add(lbTelefone);
+		painelTel.add(ddd);
+		painelTel.add(telefone);
+		
+		JLabel lbOperadora = new JLabel("Valor do Pagamento: ");
+		JComboBox valorOperadora = new JComboBox <String> ();
+		valorOperadora.addItem("TIM");
+		valorOperadora.addItem("Vivo");
+		valorOperadora.addItem("Claro");
+		JPanel painelOperadora = new JPanel();
+		painelOperadora.add(lbOperadora);
+		painelOperadora.add(valorOperadora);
+		
+		JLabel lbPagamento = new JLabel("Valor do Pagamento: ");
+		JComboBox valorPagamento = new JComboBox<String >();
+		valorPagamento.addItem(recargaValor(valorOperadora.getName()));
+		JPanel painelPagamento = new JPanel();
+		painelPagamento.add(lbPagamento);
+		painelPagamento.add(valorPagamento);
+		
+		JButton btnRecaregar = new JButton("Realizar Recarga");
+		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
+		JPanel painelBotao = new JPanel();
+		painelBotao.add(btnRecaregar);
+		painelBotao.add(btnCancelar);
+		
+		paineis.add(painelTel);
+		paineis.add(painelOperadora);
+		paineis.add(painelPagamento);
+		paineis.add(painelBotao);
+		
+		telaRecarga.add(painelSuperior(), BorderLayout.NORTH);
+		telaRecarga.add(paineis, BorderLayout.CENTER);
+	}
+	
+	public JComboBox <String> recargaValor(String op) {
+		System.out.println(op);
+		JComboBox valores = new JComboBox <String> ();
+		if ("TIM".equals(op)) {
+			valores.addItem("R$ 15");
+			valores.addItem("R$ 18");
+			valores.addItem("R$ 20");
+			valores.addItem("R$ 30");
+			valores.addItem("R$ 50");
+		} else if ("Vivo".equals(op)) {
+			valores.addItem("R$ 15");
+			valores.addItem("R$ 20");
+			valores.addItem("R$ 30");
+			valores.addItem("R$ 50");
+			valores.addItem("R$ 100");
+		} else if ("Claro".equals(op)) {
+			valores.addItem("R$ 12");
+			valores.addItem("R$ 20");
+			valores.addItem("R$ 25");
+			valores.addItem("R$ 40");
+			valores.addItem("R$ 50");
+			valores.addItem("R$ 100");
+		}
+		return valores;
 	}
 	
 	public JPanel painelSuperior() {
-		JPanel superior = new JPanel(new GridLayout(3,1));
+		JPanel superior = new JPanel(new GridLayout(1,2));
+		
+		JPanel conteudo = new JPanel(new GridLayout(3,1));
 		JLabel user = new JLabel("Ola, " + conta.getNome());
 		JLabel saldo = new JLabel("Saldo: " + String.valueOf(conta.getSaldo()));
 		JLabel acc = new JLabel ("Agencia: "+ conta.getAgencia() +" Conta: " + conta.getConta());
-		superior.add(user);
-		superior.add(acc);
-		superior.add(saldo);
+		conteudo.add(user);
+		conteudo.add(acc);
+		conteudo.add(saldo);
+		
+		JPanel painelSair = new JPanel();
+		JButton btnSair = new JButton("Sair");
+		painelSair.add(btnSair);
+		btnSair.addActionListener(this);
+		
+		superior.add(conteudo);
+		superior.add(painelSair, BorderLayout.WEST);
 		
 		return superior;
 	}
@@ -359,6 +535,24 @@ public class TelaPrincipal implements ActionListener {
 			telaEscolha.setVisible(false);
 			janela.setContentPane(telaTransferencia);
 			telaTransferencia.setVisible(true);
+		} else if ("Pagamento".equals(cmd)){
+			telaPagamento();
+			telaEscolha.setVisible(false);
+			janela.setContentPane(telaPagamento);
+			telaPagamento.setVisible(true);
+			
+		} else if ("Cancelar e Voltar ao Menu".equals(cmd)) {
+			telaEscolha();
+			janela.setContentPane(telaEscolha);
+			telaEscolha.setVisible(true);
+			janela.invalidate();
+			janela.revalidate();
+			janela.repaint();
+		} else if ("Recarga".equals(cmd)) {
+			telaRecarga();
+			telaEscolha.setVisible(false);
+			janela.setContentPane(telaRecarga);
+			telaRecarga.setVisible(true);
 		}
 	}
 }
