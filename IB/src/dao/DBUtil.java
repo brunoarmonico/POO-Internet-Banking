@@ -14,7 +14,9 @@ public class DBUtil {
 	private DBUtil() {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			con = DriverManager.getConnection("jdbc:sqlserver://localhost;database=BancoHUE;user=local;password=123456");
+			con = DriverManager.getConnection("jdbc:sqlserver://hueinternetbanking.database.windows.net;database=BancoHUE;user=teste;password=Ib12345!");
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//			con = DriverManager.getConnection("jdbc:sqlserver://localhost;database=BancoHUE;user=local;password=123456");
 
 		} catch (SQLException e) {
 			e.printStackTrace();

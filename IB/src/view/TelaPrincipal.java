@@ -5,14 +5,18 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
@@ -25,9 +29,11 @@ public class TelaPrincipal implements ActionListener {
 	private JPanel telaLogin;
 	private JPanel telaCadastro;
 	private JPanel telaEscolha;
+	private JPanel telaTransferencia;
 	private ControleIB controle = new ControleIB();
 	private JTextField login;
 	private JPasswordField senha;
+	Conta conta = new Conta();
 
 	public static void main(String[] args) {
 		janela = new JFrame("Banco do HUE");
@@ -39,6 +45,8 @@ public class TelaPrincipal implements ActionListener {
 	}
 
 	public void telaLogin() {
+		telaLogin = new JPanel(new GridLayout(3, 1));
+		
 		Font fonte = new Font("Segoe UI", Font.PLAIN, 12);
 
 		JLabel lbLogin = new JLabel("Login:");
@@ -70,7 +78,6 @@ public class TelaPrincipal implements ActionListener {
 		dadosLogin.add(painelSenha);
 		dadosLogin.add(painelBotao);
 
-		telaLogin = new JPanel(new GridLayout(3, 1));
 		telaLogin.add(new JPanel());
 		telaLogin.add(dadosLogin);
 		telaLogin.add(new JPanel());
@@ -80,7 +87,9 @@ public class TelaPrincipal implements ActionListener {
 		janela.setContentPane(telaLogin);
 	}
 
-	public void telaCad() {
+	public void telaCadastro() {
+		telaCadastro = new JPanel();
+		
 		JLabel lbNome = new JLabel("Nome Completo:");
 		JTextField nome = new JTextField(20);
 		JPanel painelNome = new JPanel();
@@ -151,7 +160,6 @@ public class TelaPrincipal implements ActionListener {
 		dadosLogin.add(painelValor);
 		dadosLogin.add(painelBotao);
 
-		telaCadastro = new JPanel();
 		telaCadastro.add(new JPanel());
 		telaCadastro.add(dadosLogin);
 		telaCadastro.add(new JPanel());
@@ -160,51 +168,155 @@ public class TelaPrincipal implements ActionListener {
 	}
 
 	public void telaEscolha() {
-		telaEscolha = new JPanel(new GridLayout(6, 1));
+		telaEscolha = new JPanel(new GridLayout(3,1));
 
 		JLabel titulo = new JLabel("Bem vindo ao banco HUE");
 		titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
 		JPanel painelTitulo = new JPanel();
 		painelTitulo.add(titulo);
 
-		JButton tranferencia = new JButton("Transferencia");
-		JButton extrato = new JButton("Extrato");
-		JPanel ext = new JPanel();
-		ext.add(tranferencia, BorderLayout.EAST);
-		ext.add(extrato, BorderLayout.WEST);
+		JPanel painelGeral = new JPanel(new GridLayout(1,4));
+		JPanel painelTransferencia = new JPanel(new GridLayout(2,1));
+		JButton btnTranferencia = new JButton("Transferencia");
+		JLabel lbTransferencia = new JLabel("Transferencia DOC ou TED \nentre contas HUE ou outros bancos");
+		painelTransferencia.add(btnTranferencia);
+		painelTransferencia.add(lbTransferencia);
+		
+		JPanel painelExtrato = new JPanel(new GridLayout(2,1));
+		JButton btnExtrato = new JButton("Extrato");
+		JLabel lbExtrato = new JLabel("Extrato de suas movimentações da conta");
+		painelExtrato.add(btnExtrato);
+		painelExtrato.add(lbExtrato);
 
-		JButton pagamento = new JButton("Pagamento");
-		JButton deposito = new JButton("Deposito");
-		JPanel dep = new JPanel();
-		dep.add(pagamento, BorderLayout.EAST);
-		dep.add(deposito, BorderLayout.WEST);
-
+		JPanel painelPagamento = new JPanel(new GridLayout(2,1));
+		JButton btnPagamento = new JButton("Pagamento");
+		JLabel lbPagamento = new JLabel("Pagamentos por codigo de barra");
+		painelPagamento.add(btnPagamento);
+		painelPagamento.add(lbPagamento);
+		
+		JPanel painelDeposito = new JPanel(new GridLayout(2,1));
+		JButton btnDeposito = new JButton("Recarga");
+		JLabel lbDeposito = new JLabel("Recarga pré pago");
+		painelDeposito.add(btnDeposito);
+		painelDeposito.add(lbDeposito);
+		
+		
 		JPanel painelInferior = new JPanel();
 		JButton btnSair = new JButton("Sair");
 		painelInferior.add(btnSair);
 		btnSair.addActionListener(this);
 		
+		btnTranferencia.addActionListener(this);
 
+		painelGeral.add(painelTransferencia);
+		painelGeral.add(painelExtrato);
+		painelGeral.add(painelPagamento);
+		painelGeral.add(painelDeposito);
+		
 		telaEscolha.add(painelTitulo);
-		telaEscolha.add(new JPanel());
-		telaEscolha.add(ext);
-		telaEscolha.add(dep);
-		telaEscolha.add(new JPanel());
-		telaEscolha.add(painelInferior);
+		telaEscolha.add(painelGeral);
 	}
 	
 	public void telaTransferencia() {
+		telaTransferencia = new JPanel(new BorderLayout());
+
+		JPanel dadosTransferencia = new JPanel(new GridLayout(8, 1));
+
+		JLabel lbBanco = new JLabel ("Banco: ");
+		JTextField banco = new JTextField(10);
+		JPanel painelBanco = new JPanel();
+		painelBanco.add(lbBanco);
+		painelBanco.add(banco);
+		
+		JLabel lbAgencia = new JLabel ("Agencia e Conta: ");
+		JTextField agencia = new JTextField(4);
+		JTextField conta = new JTextField(10);
+		JPanel painelAgenciaConta = new JPanel();
+		painelAgenciaConta.add(lbAgencia);
+		painelAgenciaConta.add(agencia);
+		painelAgenciaConta.add(conta);
+		
+		JLabel lbNomeBeneficiario = new JLabel("Nome: ");
+		JTextField nomeBeneficiario = new JTextField(20);
+		JPanel painelNomeBeneficiario = new JPanel();
+		painelNomeBeneficiario.add(lbNomeBeneficiario);
+		painelNomeBeneficiario.add(nomeBeneficiario);
+		
+		JLabel lbCpf = new JLabel("CPF: ");
+		JTextField cpf = new JTextField(10);
+		JPanel painelCpfTransf = new JPanel();
+		painelCpfTransf.add(lbCpf);
+		painelCpfTransf.add(cpf);
+		
+		JLabel lbFinalidade = new JLabel("Finalidade: ");
+		JComboBox cbxFinalidade = new JComboBox <String> ();
+		cbxFinalidade.addItem("01 - Credito em conta corrente");
+		cbxFinalidade.addItem("07 - Pagamentos em geral");
+		cbxFinalidade.addItem("12 - Transferencia Internacional");
+		cbxFinalidade.addItem("22 - DOC para Poupança");
+		cbxFinalidade.addItem("50 - Outros");
+		JPanel painelFinalidade = new JPanel();
+		painelFinalidade.add(lbFinalidade);
+		painelFinalidade.add(cbxFinalidade);
+		
+		JLabel lbIdenfificacao = new JLabel("Idenficação: ");
+		JTextArea idenficacao = new JTextArea(4,20);
+		JPanel painelIdentificacao = new JPanel();
+		painelIdentificacao.add(lbIdenfificacao);
+		painelIdentificacao.add(idenficacao);
+		
+		JLabel lbValor = new JLabel("Valor: ");
+		NumberFormatter valorFormatado = new NumberFormatter();
+		JFormattedTextField valor = new JFormattedTextField(valorFormatado);
+		valor.setColumns(10);
+		JPanel painelValor = new JPanel();
+		painelValor.add(lbValor);
+		painelValor.add(valor);
+		
+		JButton btnTransferir = new JButton("Transferir");
+		JButton btnCancelar = new JButton("Cancelar");
+		JPanel painelBotao = new JPanel();
+		painelBotao.add(btnTransferir);
+		painelBotao.add(btnCancelar);
+		
+		dadosTransferencia.add(painelBanco);
+		dadosTransferencia.add(painelAgenciaConta);
+		dadosTransferencia.add(painelNomeBeneficiario);
+		dadosTransferencia.add(painelCpfTransf);
+		dadosTransferencia.add(painelFinalidade);
+		dadosTransferencia.add(painelIdentificacao);
+		dadosTransferencia.add(painelValor);
+		dadosTransferencia.add(painelBotao);
+		
+		JScrollPane scroll = new JScrollPane(dadosTransferencia);
+		
+		telaTransferencia.add(painelSuperior(), BorderLayout.NORTH);
+		telaTransferencia.add(scroll, BorderLayout.CENTER);
+	}
+	
+	public void telaPagamento() {
 		
 	}
 	
+	public JPanel painelSuperior() {
+		JPanel superior = new JPanel(new GridLayout(3,1));
+		JLabel user = new JLabel("Ola, " + conta.getNome());
+		JLabel saldo = new JLabel("Saldo: " + String.valueOf(conta.getSaldo()));
+		JLabel acc = new JLabel ("Agencia: "+ conta.getAgencia() +" Conta: " + conta.getConta());
+		superior.add(user);
+		superior.add(acc);
+		superior.add(saldo);
+		
+		return superior;
+	}
+	
 	public boolean fazerLogin() {
-		Conta conta = new Conta();
-		System.out.println("TESTE LOGIN " +login.getText());
+		
+//		System.out.println("TESTE LOGIN " +login.getText());
 		conta.setLogin(login.getText());
-		System.out.println("TESTE senha " +senha.getPassword());
+//		System.out.println("TESTE senha " +senha.getPassword());
 		conta.setSenha(senha.toString());
-		controle.acessoConta(conta);
-		return false;
+		return controle.acessoConta(conta);
 	}
 
 	@Override
@@ -212,9 +324,8 @@ public class TelaPrincipal implements ActionListener {
 		// TODO Auto-generated method stub
 		String cmd = event.getActionCommand();
 		if ("Login".equals(cmd)) {
-			boolean aprovado;
-			aprovado = fazerLogin();
-			if (aprovado = false) {
+			boolean aprovado = fazerLogin();
+			if (aprovado == false) {
 				JOptionPane.showMessageDialog(null, "LOGIN OU SENHA INVALIDO");
 			} else {
 				telaEscolha();
@@ -226,7 +337,7 @@ public class TelaPrincipal implements ActionListener {
 				janela.repaint();
 			}
 		} else if ("Primeiro Acesso".equals(cmd)) {
-			telaCad();
+			telaCadastro();
 			telaLogin.setVisible(false);
 			janela.setContentPane(telaCadastro);
 			telaCadastro.setVisible(true);
@@ -234,6 +345,7 @@ public class TelaPrincipal implements ActionListener {
 			janela.revalidate();
 			janela.repaint();
 		}
+		
 		if ("Sair".equals(cmd)){
 			telaLogin();
 			telaEscolha.setVisible(false);
@@ -242,6 +354,11 @@ public class TelaPrincipal implements ActionListener {
 			janela.invalidate();
 			janela.revalidate();
 			janela.repaint();
+		} else if ("Transferencia".equals(cmd)) {
+			telaTransferencia();
+			telaEscolha.setVisible(false);
+			janela.setContentPane(telaTransferencia);
+			telaTransferencia.setVisible(true);
 		}
 	}
 }

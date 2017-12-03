@@ -8,6 +8,17 @@ public class Conta {
 	private int agencia;
 	private String conta;
 	private float saldo;
+	
+	public boolean modificaSaldo(Float valor) {
+		if (saldo - valor < 0) {
+			return false;
+		}
+		else {
+			saldo = saldo - valor;
+			return true;
+		}
+	}
+	
 	public String getNome() {
 		return nome;
 	}

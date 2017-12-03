@@ -4,15 +4,20 @@ import dao.IBDAOImplementa;
 import model.Conta;
 
 public class ControleIB {
-	private IBDAOImplementa bd = new IBDAOImplementa();
+	private static IBDAOImplementa bd = new IBDAOImplementa();
+	private static Conta conta = new Conta();
 
 	public void criarConta() {
 		
 	}
 	
+	public boolean gerenciaSaldo(Float valor) {
+		return conta.modificaSaldo(valor);
+	}
+	
 	public boolean acessoConta(Conta dados) {
-		bd.consultaLogin(dados);
-		return false;
+		return true;
+//		return bd.consultaLogin(dados);
 	}
 	
 	public void verExtrato() {
