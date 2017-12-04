@@ -9,7 +9,6 @@ Transferencia (DOC/TED):
 	- 03 - transferencia internacional
 	- 04 - doc para poupança
 	- 05 - outros
-
 -identificação (descrição)
 -valor
 (agendar data)
