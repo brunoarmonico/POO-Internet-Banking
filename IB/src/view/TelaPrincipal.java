@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -40,7 +41,7 @@ import model.Conta;
 public class TelaPrincipal implements ActionListener {
 	private static TelaPrincipal tela = new TelaPrincipal();
 	private static JFrame janela;
-	private JPanel telaLogin;
+	private static JPanel telaLogin;
 	private JPanel telaCadastro;
 	private JPanel telaEscolha;
 	private JPanel telaTransferencia;
@@ -50,11 +51,24 @@ public class TelaPrincipal implements ActionListener {
 	private ControleIB controle = new ControleIB();
 	private lstExtrato listaExtrato = new lstExtrato();
 	private JTextField login;
+	private JTextField nome;
+	private JTextField cpf;
+	private JTextField nconta;
+	private JTextField agencia;
+//	private JFormattedTextField saldo;
+	private JTextField saldo;
 	private JPasswordField senha;
 	Conta conta = new Conta();
+	
+	public void icon() {
+		URL link = getClass().getResource("./coin.png");
+		ImageIcon icn = new ImageIcon(link);
+		janela.setIconImage(icn.getImage());
+	}
 
 	public static void main(String[] args) {
 		janela = new JFrame("Banco do HUE");
+		tela.icon();
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
@@ -71,6 +85,7 @@ public class TelaPrincipal implements ActionListener {
 			e.printStackTrace();
 		}
 		tela.telaLogin();
+		janela.setContentPane(telaLogin);
 		janela.setVisible(true);
 		janela.setResizable(false);
 		janela.setSize(900, 550);
@@ -79,6 +94,8 @@ public class TelaPrincipal implements ActionListener {
 
 	public void telaLogin() {
 		telaLogin = new JPanel(new GridLayout(3, 1));
+		
+		JLabel imagem = new JLabel (new ImageIcon(adjustaImagem(200, 200)));
 
 		Font fonte = new Font("Segoe UI", Font.PLAIN, 12);
 
@@ -111,20 +128,20 @@ public class TelaPrincipal implements ActionListener {
 		dadosLogin.add(painelSenha);
 		dadosLogin.add(painelBotao);
 
-		telaLogin.add(new JPanel());
+		telaLogin.add(imagem);
 		telaLogin.add(dadosLogin);
 		telaLogin.add(new JPanel());
 
 		btnLogin.addActionListener(this);
 		btnCadastro.addActionListener(this);
-		janela.setContentPane(telaLogin);
+		
 	}
 
 	public void telaCadastro() {
 		telaCadastro = new JPanel();
 
 		JLabel lbNome = new JLabel("Nome Completo:");
-		JTextField nome = new JTextField(20);
+		nome = new JTextField(20);
 		JPanel painelNome = new JPanel();
 		painelNome.add(lbNome);
 		painelNome.add(nome);
@@ -142,7 +159,7 @@ public class TelaPrincipal implements ActionListener {
 		painelSenha.add(senha);
 
 		JLabel lbCpf = new JLabel("CPF:");
-		JTextField cpf = new JTextField(16);
+		cpf = new JTextField(16);
 		JPanel painelCpf = new JPanel();
 		painelCpf.add(lbCpf);
 		painelCpf.add(cpf);
@@ -154,13 +171,13 @@ public class TelaPrincipal implements ActionListener {
 		// painelBanco.add(banco);
 
 		JLabel lbConta = new JLabel("Conta:");
-		JTextField conta = new JTextField(10);
+		nconta = new JTextField(10);
 		JPanel painelConta = new JPanel();
 		painelConta.add(lbConta);
-		painelConta.add(conta);
+		painelConta.add(nconta);
 
 		JLabel lbAgencia = new JLabel("Agencia:");
-		JTextField agencia = new JTextField(5);
+		agencia = new JTextField(5);
 		JPanel painelAgencia = new JPanel();
 		painelAgencia.add(lbAgencia);
 		painelAgencia.add(agencia);
@@ -170,11 +187,12 @@ public class TelaPrincipal implements ActionListener {
 
 		NumberFormatter valorFormatado = new NumberFormatter();
 		JLabel lbValor = new JLabel("Saldo da Conta:");
-		JFormattedTextField valor = new JFormattedTextField(valorFormatado);
-		valor.setColumns(10);
+//		saldo = new JFormattedTextField(valorFormatado);
+		saldo = new JTextField();
+		saldo.setColumns(10);
 		JPanel painelValor = new JPanel();
 		painelValor.add(lbValor);
-		painelValor.add(valor);
+		painelValor.add(saldo);
 
 		JButton btnCadastro = new JButton("Cadastrar");
 		JButton btnVoltar = new JButton("Voltar");
@@ -198,6 +216,7 @@ public class TelaPrincipal implements ActionListener {
 		telaCadastro.add(new JPanel());
 
 		btnCadastro.addActionListener(this);
+		btnVoltar.addActionListener(this);
 	}
 
 	public void telaEscolha() {
@@ -302,11 +321,11 @@ public class TelaPrincipal implements ActionListener {
 
 		JLabel lbAgencia = new JLabel("Agencia e Conta: ");
 		JTextField agencia = new JTextField(4);
-		JTextField conta = new JTextField(10);
+		JTextField tconta = new JTextField(10);
 		JPanel painelAgenciaConta = new JPanel();
 		painelAgenciaConta.add(lbAgencia);
 		painelAgenciaConta.add(agencia);
-		painelAgenciaConta.add(conta);
+		painelAgenciaConta.add(tconta);
 
 		JLabel lbNomeBeneficiario = new JLabel("Nome: ");
 		JTextField nomeBeneficiario = new JTextField(20);
@@ -508,8 +527,7 @@ public class TelaPrincipal implements ActionListener {
 	}
 
 	public JPanel painelSuperior() {
-		
-		JLabel imagem = new JLabel (new ImageIcon(adjustaImagem()));
+		JLabel imagem = new JLabel (new ImageIcon(adjustaImagem(100, 100)));
 		
 		JPanel superior = new JPanel(new BorderLayout());
 
@@ -539,12 +557,25 @@ public class TelaPrincipal implements ActionListener {
 
 		// System.out.println("TESTE LOGIN " +login.getText());
 		conta.setLogin(login.getText());
-		// System.out.println("TESTE senha " +senha.getPassword());
-		conta.setSenha(senha.toString());
+		String pass = new String (senha.getPassword());
+		conta.setSenha(pass);
 		return controle.acessoConta(conta);
 	}
 	
-	public BufferedImage adjustaImagem() {
+	public void adicionarConta() {
+		Conta acc = new Conta(); 
+		acc.setNome(nome.getText());
+		acc.setLogin(login.getText());
+		acc.setCpf(cpf.getText());
+		acc.setAgencia(agencia.getText());
+		acc.setConta(nconta.getText());
+		acc.setSaldo(Float.parseFloat(saldo.getText()));
+		String pass = new String (senha.getPassword());
+		acc.setSenha(pass);
+		controle.criarConta(acc);
+	}
+	
+	public BufferedImage adjustaImagem(int w, int h) {
 		BufferedImage bufImagem = null;
 		try {
 			bufImagem = ImageIO.read(getClass().getResource("./coin.png"));
@@ -553,11 +584,11 @@ public class TelaPrincipal implements ActionListener {
 			e.printStackTrace();
 		}
 		
-		BufferedImage imgSize = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage imgSize = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 	    Graphics2D g2 = imgSize.createGraphics();
 
 	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    g2.drawImage(bufImagem, 0, 0, 100, 100, null);
+	    g2.drawImage(bufImagem, 0, 0, w, h, null);
 	    g2.dispose();
 		return imgSize;
 	}
@@ -587,6 +618,8 @@ public class TelaPrincipal implements ActionListener {
 			janela.invalidate();
 			janela.revalidate();
 			janela.repaint();
+		} else if ("Cadastrar".equals(cmd)) {
+			adicionarConta();
 		}
 
 		if ("Sair".equals(cmd)) {
@@ -625,6 +658,11 @@ public class TelaPrincipal implements ActionListener {
 			janela.invalidate();
 			janela.revalidate();
 			janela.repaint();
+		} else if("Voltar".equals(cmd)) {
+			telaLogin();
+			telaCadastro.setVisible(false);
+			janela.setContentPane(telaLogin);
+			telaLogin.setVisible(true);
 		}
 	}
 }

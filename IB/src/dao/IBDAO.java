@@ -5,7 +5,7 @@ import model.Conta;
 public interface IBDAO {
 	boolean consultaLogin(Conta conta);
 	
-	void primeiroAcesso();
+	void primeiroAcesso(Conta conta);
 	
 	void transferencia();
 	

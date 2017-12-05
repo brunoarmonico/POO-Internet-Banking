@@ -5,7 +5,7 @@ public class Conta {
 	private String cpf;
 	private String login;
 	private String senha;
-	private int agencia;
+	private String agencia;
 	private String conta;
 	private float saldo;
 	
@@ -43,10 +43,10 @@ public class Conta {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	public int getAgencia() {
+	public String getAgencia() {
 		return agencia;
 	}
-	public void setAgencia(int agencia) {
+	public void setAgencia(String agencia) {
 		this.agencia = agencia;
 	}
 	public String getConta() {

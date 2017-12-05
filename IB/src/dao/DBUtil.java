@@ -5,19 +5,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;  
 
 public class DBUtil {
-//	private final static String USERNAME = "(local)";
-//	private final static String PASSWORD = "";
-//	private final static String URLDB = "jdbc:sqlserver://localhost:20000";
 	private static DBUtil instancia;
 	private Connection con;
 
 	private DBUtil() {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			con = DriverManager.getConnection("jdbc:sqlserver://hueinternetbanking.database.windows.net;database=BancoHUE;user=teste;password=Ib12345!");
 //			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//			con = DriverManager.getConnection("jdbc:sqlserver://localhost;database=BancoHUE;user=local;password=123456");
-
+//			con = DriverManager.getConnection("jdbc:sqlserver://hueinternetbanking.database.windows.net;database=BancoHUE;user=teste;password=Ib12345!");
+			Class.forName("net.sourceforge.jtds.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:jtds:sqlserver://hueinternetbanking.database.windows.net:1433;DatabaseName=BancoHUE;namedPipes=true;user=teste;password=Ib12345!");
+			System.out.println("Logado no Azure");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

@@ -7,8 +7,9 @@ public class ControleIB {
 	private static IBDAOImplementa bd = new IBDAOImplementa();
 	private static Conta conta = new Conta();
 
-	public void criarConta() {
-		
+	public void criarConta(Conta conta) {
+		bd.primeiroAcesso(conta);
+		return;
 	}
 	
 	public boolean gerenciaSaldo(Float valor) {
@@ -16,8 +17,8 @@ public class ControleIB {
 	}
 	
 	public boolean acessoConta(Conta dados) {
-		return true;
-//		return bd.consultaLogin(dados);
+//		return true;
+		return bd.consultaLogin(dados);
 	}
 	
 	public void verExtrato() {
