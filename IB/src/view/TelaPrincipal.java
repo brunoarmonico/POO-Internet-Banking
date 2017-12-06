@@ -39,6 +39,7 @@ import javax.swing.text.PlainDocument;
 import controller.ControleIB;
 import controller.lstExtrato;
 import model.Conta;
+import model.Transferencia;
 
 public class TelaPrincipal implements ActionListener {
 	private static TelaPrincipal tela = new TelaPrincipal();
@@ -50,6 +51,8 @@ public class TelaPrincipal implements ActionListener {
 	private JPanel telaPagamento;
 	private JPanel telaRecarga;
 	private JPanel telaExtrato;
+	private JPanel painelSuperior;
+
 	private ControleIB controle = new ControleIB();
 	private lstExtrato listaExtrato = new lstExtrato();
 	private JTextField login;
@@ -57,12 +60,24 @@ public class TelaPrincipal implements ActionListener {
 	private JTextField cpf;
 	private JTextField nconta;
 	private JTextField agencia;
-//	private JFormattedTextField saldo;
+	// private JFormattedTextField saldo;
 	private JTextField saldo;
 	private JPasswordField senha;
+
+	private JTextField bancoReceb;
+	private JTextField agenciaReceb;
+	private JTextField contaReceb;
+	private JTextField nomeReceb;
+	private JTextField cpfReceb;
+	// private JFormattedTextField valorReceb;
+	private JTextField valorReceb;
+	private JComboBox cbxFinalidade;
+
+	JTable tabelaExtrato = new JTable();
+	private JTextArea identificacao;
 	Conta conta = new Conta();
-	
-	public void icon ()  {
+
+	public void icon() {
 		URL link = getClass().getResource("./coin.png");
 		ImageIcon icn = new ImageIcon(link);
 		janela.setIconImage(icn.getImage());
@@ -71,13 +86,14 @@ public class TelaPrincipal implements ActionListener {
 	public static void main(String[] args) {
 		janela = new JFrame("Banco do HUE");
 		tela.icon();
-		
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-		
+
 		tela.telaLogin();
 		janela.setContentPane(telaLogin);
 		janela.setVisible(true);
@@ -88,8 +104,8 @@ public class TelaPrincipal implements ActionListener {
 
 	public void telaLogin() {
 		telaLogin = new JPanel(new GridLayout(3, 1));
-		
-		JLabel imagem = new JLabel (new ImageIcon(adjustaImagem(200, 200)));
+
+		JLabel imagem = new JLabel(new ImageIcon(adjustaImagem(200, 200)));
 
 		Font fonte = new Font("Segoe UI", Font.PLAIN, 12);
 
@@ -128,7 +144,7 @@ public class TelaPrincipal implements ActionListener {
 
 		btnLogin.addActionListener(this);
 		btnCadastro.addActionListener(this);
-		
+
 	}
 
 	public void telaCadastro() {
@@ -139,36 +155,36 @@ public class TelaPrincipal implements ActionListener {
 		JPanel painelNome = new JPanel();
 		painelNome.add(lbNome);
 		painelNome.add(nome);
-		
+
 		PlainDocument ajNome = (PlainDocument) nome.getDocument();
-		ajNome.setDocumentFilter(new ajuste(200));
+		ajNome.setDocumentFilter(new ajuste(200, "Text"));
 
 		JLabel lbLogin = new JLabel("Login:");
 		login = new JTextField(20);
 		JPanel painelLogin = new JPanel();
 		painelLogin.add(lbLogin);
 		painelLogin.add(login);
-		
+
 		PlainDocument ajLogin = (PlainDocument) login.getDocument();
-		ajLogin.setDocumentFilter(new ajuste(50));
+		ajLogin.setDocumentFilter(new ajuste(50, "Text"));
 
 		JLabel lbSenha = new JLabel("Senha:");
 		senha = new JPasswordField(20);
 		JPanel painelSenha = new JPanel();
 		painelSenha.add(lbSenha);
 		painelSenha.add(senha);
-		
+
 		PlainDocument ajSenha = (PlainDocument) senha.getDocument();
-		ajSenha.setDocumentFilter(new ajuste(30));
+		ajSenha.setDocumentFilter(new ajuste(30, "Text"));
 
 		JLabel lbCpf = new JLabel("CPF:");
 		cpf = new JTextField(16);
 		JPanel painelCpf = new JPanel();
 		painelCpf.add(lbCpf);
 		painelCpf.add(cpf);
-		
+
 		PlainDocument ajCpf = (PlainDocument) cpf.getDocument();
-		ajCpf.setDocumentFilter(new ajuste(11));
+		ajCpf.setDocumentFilter(new ajuste(11, "Int"));
 
 		JPanel painelBanco = new JPanel(new GridLayout(1, 2));
 
@@ -177,32 +193,23 @@ public class TelaPrincipal implements ActionListener {
 		JPanel painelConta = new JPanel();
 		painelConta.add(lbConta);
 		painelConta.add(nconta);
-		
+
 		PlainDocument ajConta = (PlainDocument) nconta.getDocument();
-		ajConta.setDocumentFilter(new ajuste(10));
+		ajConta.setDocumentFilter(new ajuste(10, "Int"));
 
 		JLabel lbAgencia = new JLabel("Agencia:");
 		agencia = new JTextField(5);
 		JPanel painelAgencia = new JPanel();
 		painelAgencia.add(lbAgencia);
 		painelAgencia.add(agencia);
-		
+
 		PlainDocument ajAgencia = (PlainDocument) agencia.getDocument();
-		ajAgencia.setDocumentFilter(new ajuste(4));
+		ajAgencia.setDocumentFilter(new ajuste(4, "Int"));
 
 		painelBanco.add(painelAgencia);
 		painelBanco.add(painelConta);
 
-//		NumberFormat numerico = NumberFormat.getIntegerInstance();
-//		NumberFormatter valorFormatado = new NumberFormatter(numerico);
-//		valorFormatado.setValueClass(Float.class);
-//		valorFormatado.setAllowsInvalid(false);
-//		valorFormatado.setCommitsOnValidEdit(true);
-//		valorFormatado.setMinimum(04);
-//		valorFormatado.setMaximum(04);
-		
 		JLabel lbValor = new JLabel("Saldo da Conta:");
-//		saldo = new JFormattedTextField(valorFormatado);
 		saldo = new JTextField();
 		saldo.setColumns(10);
 		JPanel painelValor = new JPanel();
@@ -329,33 +336,48 @@ public class TelaPrincipal implements ActionListener {
 		JPanel dadosTransferencia = new JPanel(new GridLayout(8, 1));
 
 		JLabel lbBanco = new JLabel("Banco: ");
-		JTextField banco = new JTextField(10);
+		bancoReceb = new JTextField(10);
 		JPanel painelBanco = new JPanel();
 		painelBanco.add(lbBanco);
-		painelBanco.add(banco);
+		painelBanco.add(bancoReceb);
+
+		PlainDocument ajbanco = (PlainDocument) bancoReceb.getDocument();
+		ajbanco.setDocumentFilter(new ajuste(3, "Int"));
 
 		JLabel lbAgencia = new JLabel("Agencia e Conta: ");
-		JTextField agencia = new JTextField(4);
-		JTextField tconta = new JTextField(10);
+		agenciaReceb = new JTextField(4);
+		contaReceb = new JTextField(10);
 		JPanel painelAgenciaConta = new JPanel();
 		painelAgenciaConta.add(lbAgencia);
-		painelAgenciaConta.add(agencia);
-		painelAgenciaConta.add(tconta);
+		painelAgenciaConta.add(agenciaReceb);
+		painelAgenciaConta.add(contaReceb);
+
+		PlainDocument ajAje = (PlainDocument) agenciaReceb.getDocument();
+		ajAje.setDocumentFilter(new ajuste(4, "Int"));
+
+		PlainDocument ajCont = (PlainDocument) contaReceb.getDocument();
+		ajCont.setDocumentFilter(new ajuste(10, "Int"));
 
 		JLabel lbNomeBeneficiario = new JLabel("Nome: ");
-		JTextField nomeBeneficiario = new JTextField(20);
+		nomeReceb = new JTextField(20);
 		JPanel painelNomeBeneficiario = new JPanel();
 		painelNomeBeneficiario.add(lbNomeBeneficiario);
-		painelNomeBeneficiario.add(nomeBeneficiario);
+		painelNomeBeneficiario.add(nomeReceb);
+
+		PlainDocument ajNome = (PlainDocument) nomeReceb.getDocument();
+		ajNome.setDocumentFilter(new ajuste(200, "Text"));
 
 		JLabel lbCpf = new JLabel("CPF: ");
-		JTextField cpf = new JTextField(10);
+		cpfReceb = new JTextField(10);
 		JPanel painelCpfTransf = new JPanel();
 		painelCpfTransf.add(lbCpf);
-		painelCpfTransf.add(cpf);
+		painelCpfTransf.add(cpfReceb);
+
+		PlainDocument ajCpf = (PlainDocument) cpfReceb.getDocument();
+		ajCpf.setDocumentFilter(new ajuste(11, "Int"));
 
 		JLabel lbFinalidade = new JLabel("Finalidade: ");
-		JComboBox cbxFinalidade = new JComboBox<String>();
+		cbxFinalidade = new JComboBox<String>();
 		cbxFinalidade.addItem("01 - Credito em conta corrente");
 		cbxFinalidade.addItem("07 - Pagamentos em geral");
 		cbxFinalidade.addItem("12 - Transferencia Internacional");
@@ -366,25 +388,31 @@ public class TelaPrincipal implements ActionListener {
 		painelFinalidade.add(cbxFinalidade);
 
 		JLabel lbIdenfificacao = new JLabel("Idenficação: ");
-		JTextArea idenficacao = new JTextArea(4, 20);
+		identificacao = new JTextArea(4, 20);
 		JPanel painelIdentificacao = new JPanel();
 		painelIdentificacao.add(lbIdenfificacao);
-		painelIdentificacao.add(idenficacao);
+		painelIdentificacao.add(identificacao);
+
+		PlainDocument ajId = (PlainDocument) identificacao.getDocument();
+		ajId.setDocumentFilter(new ajuste(200, "Text"));
 
 		JLabel lbValor = new JLabel("Valor: ");
-		NumberFormatter valorFormatado = new NumberFormatter();
-		JFormattedTextField valor = new JFormattedTextField(valorFormatado);
-		valor.setColumns(10);
+		// NumberFormatter valorFormatado = new NumberFormatter();
+		// valorReceb = new JFormattedTextField(valorFormatado);
+		// valorReceb.setColumns(10);
+		valorReceb = new JTextField(10);
 		JPanel painelValor = new JPanel();
 		painelValor.add(lbValor);
-		painelValor.add(valor);
+		painelValor.add(valorReceb);
 
 		JButton btnTransferir = new JButton("Transferir");
 		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
 		JPanel painelBotao = new JPanel();
 		painelBotao.add(btnTransferir);
 		painelBotao.add(btnCancelar);
+
 		btnCancelar.addActionListener(this);
+		btnTransferir.addActionListener(this);
 
 		dadosTransferencia.add(painelBanco);
 		dadosTransferencia.add(painelAgenciaConta);
@@ -482,7 +510,7 @@ public class TelaPrincipal implements ActionListener {
 		paineis.add(painelOperadora);
 		paineis.add(painelPagamento);
 		paineis.add(painelBotao);
-		
+
 		btnCancelar.addActionListener(this);
 
 		telaRecarga.add(painelSuperior(), BorderLayout.NORTH);
@@ -517,21 +545,24 @@ public class TelaPrincipal implements ActionListener {
 
 	public void telaExtrato() {
 		telaExtrato = new JPanel(new BorderLayout());
-		
+
 		JLabel lbExtrato = new JLabel("<html><center>Extrato atual</html>");
 		lbExtrato.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		
-		JTable extrato = new JTable(listaExtrato);
-		
+		tabelaExtrato = new JTable(listaExtrato);
+		tabelaExtrato.setModel(listaExtrato);
+		tabelaExtrato.setOpaque(true);
+
 		JButton btnVoltar = new JButton("Voltar ao Menu");
 		btnVoltar.setPreferredSize(new Dimension(150, 40));
 		JPanel painelBtn = new JPanel();
 		painelBtn.add(btnVoltar);
-		
+		JScrollPane scroll = new JScrollPane();
+		scroll.getViewport().add(tabelaExtrato);
+
 		JPanel painelExtrato = new JPanel(new BorderLayout());
 
 		painelExtrato.add(lbExtrato, BorderLayout.NORTH);
-		painelExtrato.add(extrato, BorderLayout.CENTER);
+		painelExtrato.add(scroll, BorderLayout.CENTER);
 		painelExtrato.add(painelBtn, BorderLayout.SOUTH);
 
 		btnVoltar.addActionListener(this);
@@ -542,9 +573,9 @@ public class TelaPrincipal implements ActionListener {
 	}
 
 	public JPanel painelSuperior() {
-		JLabel imagem = new JLabel (new ImageIcon(adjustaImagem(100, 100)));
-		
-		JPanel superior = new JPanel(new BorderLayout());
+		JLabel imagem = new JLabel(new ImageIcon(adjustaImagem(100, 100)));
+
+		painelSuperior = new JPanel(new BorderLayout());
 
 		JPanel conteudo = new JPanel(new GridLayout(3, 1));
 		JLabel user = new JLabel("Ola, " + conta.getNome());
@@ -556,49 +587,69 @@ public class TelaPrincipal implements ActionListener {
 
 		JPanel painelSair = new JPanel();
 		JButton btnSair = new JButton("Sair");
-		btnSair.setPreferredSize(new Dimension(150,40));
+		btnSair.setPreferredSize(new Dimension(150, 40));
 		painelSair.add(btnSair);
 		btnSair.addActionListener(this);
 
-		superior.add(imagem, BorderLayout.WEST);
-		superior.add(conteudo, BorderLayout.CENTER);
-		superior.add(painelSair, BorderLayout.EAST);
-		superior.add(new JSeparator(), BorderLayout.SOUTH);
+		painelSuperior.add(imagem, BorderLayout.WEST);
+		painelSuperior.add(conteudo, BorderLayout.CENTER);
+		painelSuperior.add(painelSair, BorderLayout.EAST);
+		painelSuperior.add(new JSeparator(), BorderLayout.SOUTH);
 
-		return superior;
+		return painelSuperior;
 	}
 
 	public boolean fazerLogin() {
-
-		// System.out.println("TESTE LOGIN " +login.getText());
 		conta.setLogin(login.getText());
-		String pass = new String (senha.getPassword());
+		String pass = new String(senha.getPassword());
 		conta.setSenha(pass);
 		return controle.acessoConta(conta);
 	}
-	
+
 	public void adicionarConta() {
-		if (nome.getText().isEmpty() || login.getText().isEmpty() || cpf.getText().isEmpty() || 
-				agencia.getText().isEmpty() || nconta.getText().isEmpty()) {
+		if (nome.getText().isEmpty() || login.getText().isEmpty() || cpf.getText().isEmpty()
+				|| agencia.getText().isEmpty() || nconta.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "POR FAVOR, PREENCHA TODOS OS CAMPOS");
-		}
-		else if (Float.parseFloat(saldo.getText()) < 0 || Float.parseFloat(saldo.getText()) > 10000000  || saldo.getText().isEmpty()) {
+		} else if (Float.parseFloat(saldo.getText()) < 0 || Float.parseFloat(saldo.getText()) > 10000000
+				|| saldo.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "VALOR DE SALDO DEVE SER ENTRE 0 E 10000000");
-		}
-		else {
-		Conta acc = new Conta(); 
-		acc.setNome(nome.getText());
-		acc.setLogin(login.getText());
-		acc.setCpf(cpf.getText());
-		acc.setAgencia(agencia.getText());
-		acc.setConta(nconta.getText());
-		acc.setSaldo(Float.parseFloat(saldo.getText()));
-		String pass = new String (senha.getPassword());
-		acc.setSenha(pass);
-		controle.criarConta(acc);
+		} else {
+			Conta acc = new Conta();
+			acc.setNome(nome.getText());
+			acc.setLogin(login.getText());
+			acc.setCpf(cpf.getText());
+			acc.setAgencia(agencia.getText());
+			acc.setConta(nconta.getText());
+			acc.setSaldo(Float.parseFloat(saldo.getText()));
+			String pass = new String(senha.getPassword());
+			acc.setSenha(pass);
+			controle.criarConta(acc);
 		}
 	}
-	
+
+	public void transferenciaConta() {
+		if (agenciaReceb.getText().isEmpty() || contaReceb.getText().isEmpty() || cpfReceb.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "POR FAVOR, PREENCHA TODOS OS CAMPOS");
+		} else if (valorReceb.getText().isEmpty() || Float.parseFloat(valorReceb.getText()) < 1) {
+			JOptionPane.showMessageDialog(null, "O VALOR DA TRANSFERENCIA DEVE SER MAIOR QUE 1");
+		} else {
+			if (conta.modificaSaldo(Float.parseFloat(valorReceb.getText())) == true) {
+				Transferencia destino = new Transferencia();
+				destino.setAgencia(agenciaReceb.getText());
+				destino.setConta(contaReceb.getText());
+				destino.setCpf(cpfReceb.getText());
+				destino.setValor(Float.parseFloat(valorReceb.getText()));
+				String ocorrencia = "Transferencia - [" + cbxFinalidade.getSelectedItem().toString() + "]";
+				painelSuperior.invalidate();
+				painelSuperior.revalidate();
+				painelSuperior.repaint();
+				controle.transferirValor(conta, destino, ocorrencia, identificacao.getText());
+			} else {
+				JOptionPane.showMessageDialog(null, "SALDO INSUFICIENTE PARA TRANSFERENCIA");
+			}
+		}
+	}
+
 	public BufferedImage adjustaImagem(int w, int h) {
 		BufferedImage bufImagem = null;
 		try {
@@ -607,13 +658,13 @@ public class TelaPrincipal implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		BufferedImage imgSize = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-	    Graphics2D g2 = imgSize.createGraphics();
 
-	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    g2.drawImage(bufImagem, 0, 0, w, h, null);
-	    g2.dispose();
+		BufferedImage imgSize = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = imgSize.createGraphics();
+
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.drawImage(bufImagem, 0, 0, w, h, null);
+		g2.dispose();
 		return imgSize;
 	}
 
@@ -671,10 +722,14 @@ public class TelaPrincipal implements ActionListener {
 			janela.setContentPane(telaRecarga);
 			telaRecarga.setVisible(true);
 		} else if ("Extrato".equals(cmd)) {
+			listaExtrato.verExtrato(conta);
 			telaExtrato();
 			telaEscolha.setVisible(false);
 			janela.setContentPane(telaExtrato);
 			telaExtrato.setVisible(true);
+			tabelaExtrato.invalidate();
+			tabelaExtrato.revalidate();
+			tabelaExtrato.repaint();
 		} else if ("Cancelar e Voltar ao Menu".equals(cmd) || "Voltar ao Menu".equals(cmd)) {
 			telaEscolha();
 			janela.setContentPane(telaEscolha);
@@ -682,29 +737,33 @@ public class TelaPrincipal implements ActionListener {
 			janela.invalidate();
 			janela.revalidate();
 			janela.repaint();
-		} else if("Voltar".equals(cmd)) {
+		} else if ("Voltar".equals(cmd)) {
 			telaLogin();
 			telaCadastro.setVisible(false);
 			janela.setContentPane(telaLogin);
 			telaLogin.setVisible(true);
 		}
-	}
-	
-	//AJUSTA TEXTO
-	
-	class ajuste extends DocumentFilter {
-		
-		private int limite;
-		public ajuste(int limite) {
-			this.limite = limite;
+
+		if ("Transferir".equals(cmd)) {
+			transferenciaConta();
 		}
-		
-		public ajuste(String texto, int tamanho) {
-			// TODO Auto-generated constructor stub
+	}
+
+	// AJUSTA TEXTO
+
+	class ajuste extends DocumentFilter {
+
+		private int limite;
+		private String tipo;
+
+		public ajuste(int limite, String tipo) {
+			this.limite = limite;
+			this.tipo = tipo;
 		}
 
 		@Override
-		public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+		public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+				throws BadLocationException {
 
 			Document doc = fb.getDocument();
 			StringBuilder sb = new StringBuilder();
@@ -719,20 +778,43 @@ public class TelaPrincipal implements ActionListener {
 		}
 
 		private boolean test(String text) {
-			try {
-				if(text.length() <= limite) {
+			System.out.println("limite " +limite);
+			if ("Text".equals(tipo)) {
+				if (text.length() <= limite) {
 					return true;
-				}
-				else {
+				} else {
 					return false;
 				}
-			} catch (NumberFormatException e) {
-				return false;
+			} else if ("Int".equals(tipo)) {
+				if (text.length() <= limite) {
+					try {
+						Long.parseLong(text);
+						return true;
+					} catch (NumberFormatException e) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			} else if ("Float".equals(tipo)) {
+				if (text.length() <= limite) {
+					try {
+						Float.parseFloat(text);
+						return true;
+					} catch (NumberFormatException e) {
+						return false;
+					}
+				} else {
+					return false;
+				}
 			}
+
+			return false;
 		}
 
 		@Override
-		public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+		public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+				throws BadLocationException {
 			Document doc = fb.getDocument();
 			StringBuilder sb = new StringBuilder();
 			sb.append(doc.getText(0, doc.getLength()));

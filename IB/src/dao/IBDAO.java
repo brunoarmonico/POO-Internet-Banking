@@ -1,15 +1,21 @@
 package dao;
 
+import java.util.List;
+
 import model.Conta;
+import model.Extrato;
+import model.Transferencia;
 
 public interface IBDAO {
 	boolean consultaLogin(Conta conta);
 	
 	void primeiroAcesso(Conta conta);
 	
-	void transferencia();
+	void transferencia(Conta conta, Transferencia destino, String ocorrencia, String identificacao);
 	
-	void pagamento();
+	void pagamento(Transferencia transferido, Conta conta, String identificacao);
 	
 	void recebeDados(Conta conta);
+	
+	List <Extrato> extrato (Conta conta);
 }

@@ -2,6 +2,8 @@ package controller;
 
 import dao.IBDAOImplementa;
 import model.Conta;
+import model.Extrato;
+import model.Transferencia;
 
 public class ControleIB {
 	private static IBDAOImplementa bd = new IBDAOImplementa();
@@ -17,19 +19,14 @@ public class ControleIB {
 	}
 	
 	public boolean acessoConta(Conta dados) {
-//		return true;
 		return bd.consultaLogin(dados);
 	}
 	
-	public void verExtrato() {
-		
+	public void transferirValor(Conta conta, Transferencia destino, String ocorrencia, String identificacao) {
+		bd.transferencia(conta, destino, ocorrencia, identificacao);
 	}
 	
-	public void transferirValor() {
-		
-	}
-	
-	public void pagarConta() {
-		
+	public void pagarConta(Transferencia transferido, Conta conta, String identificacao) {
+		bd.pagamento(transferido, conta, identificacao);
 	}
 }
