@@ -14,7 +14,6 @@ public class Conta {
 			return false;
 		}
 		else {
-			saldo = saldo - valor;
 			return true;
 		}
 	}

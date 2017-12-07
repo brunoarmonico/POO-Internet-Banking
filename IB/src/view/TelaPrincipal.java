@@ -60,7 +60,7 @@ public class TelaPrincipal implements ActionListener {
 	private JTextField cpf;
 	private JTextField nconta;
 	private JTextField agencia;
-	// private JFormattedTextField saldo;
+
 	private JTextField saldo;
 	private JPasswordField senha;
 
@@ -69,13 +69,18 @@ public class TelaPrincipal implements ActionListener {
 	private JTextField contaReceb;
 	private JTextField nomeReceb;
 	private JTextField cpfReceb;
-	// private JFormattedTextField valorReceb;
+
 	private JTextField valorReceb;
 	private JComboBox cbxFinalidade;
 
 	JTable tabelaExtrato = new JTable();
 	private JTextArea identificacao;
 	Conta conta = new Conta();
+
+	private JTextField valorPagamento;
+	private JTextArea identificacaoPagamento;
+
+	private int clkConta;
 
 	public void icon() {
 		URL link = getClass().getResource("./coin.png");
@@ -195,7 +200,7 @@ public class TelaPrincipal implements ActionListener {
 		painelConta.add(nconta);
 
 		PlainDocument ajConta = (PlainDocument) nconta.getDocument();
-		ajConta.setDocumentFilter(new ajuste(10, "Int"));
+		ajConta.setDocumentFilter(new ajuste(10, "Text"));
 
 		JLabel lbAgencia = new JLabel("Agencia:");
 		agencia = new JTextField(5);
@@ -356,10 +361,11 @@ public class TelaPrincipal implements ActionListener {
 		ajAje.setDocumentFilter(new ajuste(4, "Int"));
 
 		PlainDocument ajCont = (PlainDocument) contaReceb.getDocument();
-		ajCont.setDocumentFilter(new ajuste(10, "Int"));
+		ajCont.setDocumentFilter(new ajuste(10, "Text"));
 
 		JLabel lbNomeBeneficiario = new JLabel("Nome: ");
 		nomeReceb = new JTextField(20);
+		nomeReceb.setEditable(false);
 		JPanel painelNomeBeneficiario = new JPanel();
 		painelNomeBeneficiario.add(lbNomeBeneficiario);
 		painelNomeBeneficiario.add(nomeReceb);
@@ -440,16 +446,16 @@ public class TelaPrincipal implements ActionListener {
 		painelCodigo.add(codigoBarras);
 
 		JLabel lbPagamento = new JLabel("Valor do Pagamento: ");
-		JTextField valorPagamento = new JTextField(10);
+		valorPagamento = new JTextField(10);
 		JPanel painelPagamento = new JPanel();
 		painelPagamento.add(lbPagamento);
 		painelPagamento.add(valorPagamento);
 
 		JLabel lbIdent = new JLabel("Identificação: ");
-		JTextArea identificacao = new JTextArea(4, 20);
+		identificacaoPagamento = new JTextArea(4, 20);
 		JPanel painelIden = new JPanel();
 		painelIden.add(lbIdent);
-		painelIden.add(identificacao);
+		painelIden.add(identificacaoPagamento);
 
 		JButton btnPagar = new JButton("Pagar");
 		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
@@ -462,6 +468,7 @@ public class TelaPrincipal implements ActionListener {
 		paineis.add(painelIden);
 		paineis.add(painelBotao);
 
+		btnPagar.addActionListener(this);
 		btnCancelar.addActionListener(this);
 
 		telaPagamento.add(painelSuperior(), BorderLayout.NORTH);
@@ -569,7 +576,6 @@ public class TelaPrincipal implements ActionListener {
 
 		telaExtrato.add(painelSuperior(), BorderLayout.NORTH);
 		telaExtrato.add(painelExtrato, BorderLayout.CENTER);
-
 	}
 
 	public JPanel painelSuperior() {
@@ -628,24 +634,65 @@ public class TelaPrincipal implements ActionListener {
 	}
 
 	public void transferenciaConta() {
+		Transferencia destino = new Transferencia();
 		if (agenciaReceb.getText().isEmpty() || contaReceb.getText().isEmpty() || cpfReceb.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "POR FAVOR, PREENCHA TODOS OS CAMPOS");
 		} else if (valorReceb.getText().isEmpty() || Float.parseFloat(valorReceb.getText()) < 1) {
 			JOptionPane.showMessageDialog(null, "O VALOR DA TRANSFERENCIA DEVE SER MAIOR QUE 1");
 		} else {
+
 			if (conta.modificaSaldo(Float.parseFloat(valorReceb.getText())) == true) {
-				Transferencia destino = new Transferencia();
 				destino.setAgencia(agenciaReceb.getText());
 				destino.setConta(contaReceb.getText());
 				destino.setCpf(cpfReceb.getText());
 				destino.setValor(Float.parseFloat(valorReceb.getText()));
 				String ocorrencia = "Transferencia - [" + cbxFinalidade.getSelectedItem().toString() + "]";
-				painelSuperior.invalidate();
-				painelSuperior.revalidate();
-				painelSuperior.repaint();
-				controle.transferirValor(conta, destino, ocorrencia, identificacao.getText());
+				clkConta++;
+				if (clkConta == 1) {
+					String nomeDest = controle.verificaConta(destino);
+					System.out.println("nome recebido: " + nomeDest);
+					if (nomeDest == null) {
+						JOptionPane.showMessageDialog(null, "CONTA DESTINO NÃO ENCONTRADA");
+						clkConta = 0;
+					} else {
+						nomeReceb.setText(nomeDest);
+					}
+				} else if (clkConta == 2) {
+					int ok = JOptionPane.showConfirmDialog(null, "DESEJA REALIZAR ESTA TRANSFERENCIA?");
+					System.out.println(ok);
+					if (ok == 0) {
+						conta.setSaldo(conta.getSaldo() - Float.parseFloat(valorReceb.getText()));
+						painelSuperior.invalidate();
+						painelSuperior.revalidate();
+						painelSuperior.repaint();
+						controle.transferirValor(conta, destino, ocorrencia, identificacao.getText());
+						JOptionPane.showMessageDialog(null, "TRANSFERENCIA REALIZADA COM SUCESSO!");
+					} else {
+						painelSuperior.invalidate();
+						painelSuperior.revalidate();
+						painelSuperior.repaint();
+					}
+					clkConta = 0;
+				}
+
 			} else {
 				JOptionPane.showMessageDialog(null, "SALDO INSUFICIENTE PARA TRANSFERENCIA");
+			}
+		}
+	}
+
+	public void pagamentoCodigo() {
+		if (Float.parseFloat(valorPagamento.getText()) <= 0) {
+			JOptionPane.showMessageDialog(null, "VALOR DE PAGAMENTO INVALIDO");
+		} else if (conta.getSaldo() - (Float.parseFloat(valorPagamento.getText())) < 0) {
+			JOptionPane.showMessageDialog(null, "SALDO NA CONTA INSUFICIENTE");
+		} else {
+			int ok = JOptionPane.showConfirmDialog(null, "DESEJA REALIZAR ESTE PAGAMENTO?");
+			if (ok == 0) {
+				Float valor = Float.parseFloat(valorPagamento.getText());
+				conta.setSaldo(conta.getSaldo() - Float.parseFloat(valorPagamento.getText()));
+				controle.pagarConta(valor, conta, identificacaoPagamento.getText());
+				JOptionPane.showMessageDialog(null, "PAGAMENTO REALIZADO COM SUCESSO!");
 			}
 		}
 	}
@@ -743,9 +790,11 @@ public class TelaPrincipal implements ActionListener {
 			janela.setContentPane(telaLogin);
 			telaLogin.setVisible(true);
 		}
-
 		if ("Transferir".equals(cmd)) {
 			transferenciaConta();
+		}
+		if ("Pagar".equals(cmd)) {
+			pagamentoCodigo();
 		}
 	}
 
@@ -778,7 +827,6 @@ public class TelaPrincipal implements ActionListener {
 		}
 
 		private boolean test(String text) {
-			System.out.println("limite " +limite);
 			if ("Text".equals(tipo)) {
 				if (text.length() <= limite) {
 					return true;

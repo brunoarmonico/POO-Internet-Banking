@@ -143,11 +143,12 @@ public class IBDAOImplementa implements IBDAO {
 	}
 
 	@Override
-	public void pagamento(Transferencia transferido, Conta conta, String identificacao) {
+	public void pagamento(Float valor, Conta conta, String identificacao) {
 		// TODO Auto-generated method stub
 		Connection conexao = DBUtil.getInstance().getConnection();
-		String pag = "UPDATE CLIENTE" 
-		+ "SET SALDO = "+ conta.getSaldo();
+		String pag = "UPDATE CLIENTE "
+		+ "SET SALDO = "+ conta.getSaldo()
+		+ " WHERE CPF = '" + conta.getCpf() +"'";
 		try {
 			PreparedStatement dados = conexao.prepareStatement(pag);
 			dados.executeUpdate();
@@ -157,20 +158,19 @@ public class IBDAOImplementa implements IBDAO {
 		}
 
 		String ext = "INSERT INTO EXTRATO (DATAOCORRENCIA, OCORRENCIA, DESCRICAO, VALOR, AGENCIA, CONTA, CPF) VALUES "
-				+ "(GETDATE(), 'PAGAMENTO POR CODIGO DE BARRA', ?, ?, ?, ?, ?)";
+				+ "(GETDATE(), 'PAGAMENTO POR CODIGO DE BARRAS', ?, ?, ?, ?, ?)";
 		try {
 			PreparedStatement dados = conexao.prepareStatement(ext);
 			dados.setString(1, identificacao);
-			dados.setFloat(2, transferido.getValor());
-			dados.setString(3, transferido.getAgencia());
-			dados.setString(4, transferido.getConta());
-			dados.setString(5, transferido.getCpf());
+			dados.setFloat(2, valor);
+			dados.setString(3, conta.getAgencia());
+			dados.setString(4, conta.getConta());
+			dados.setString(5, conta.getCpf());
 			dados.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		JOptionPane.showMessageDialog(null, "PAGAMENTO REALIZADO COM SUCESSO!");
 	}
 
 	@Override
@@ -227,6 +227,26 @@ public class IBDAOImplementa implements IBDAO {
 		}
 
 		return temp;
+	}
+	
+	public String buscaUsuario (Transferencia destino) {
+		System.out.println(destino.getConta() + " - " + destino.getAgencia() + " - " +  destino.getCpf());
+		Connection conexao = DBUtil.getInstance().getConnection();
+		String ext = "SELECT NOME FROM CLIENTE "
+			+ "WHERE CONTA  = '" + destino.getConta() + "' AND AGENCIA  = '" + destino.getAgencia() + "' AND CPF = '"+ destino.getCpf() +"'";
+		try {
+			PreparedStatement dados = conexao.prepareStatement(ext);
+			ResultSet resultado = dados.executeQuery();
+			String nome = null;
+			while (resultado.next()) {
+				nome = resultado.getString("nome");
+			}
+			return nome;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

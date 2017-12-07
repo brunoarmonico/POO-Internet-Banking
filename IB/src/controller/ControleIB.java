@@ -26,7 +26,11 @@ public class ControleIB {
 		bd.transferencia(conta, destino, ocorrencia, identificacao);
 	}
 	
-	public void pagarConta(Transferencia transferido, Conta conta, String identificacao) {
-		bd.pagamento(transferido, conta, identificacao);
+	public void pagarConta(Float valor, Conta conta, String identificacao) {
+		bd.pagamento(valor, conta, identificacao);
+	}
+	
+	public String verificaConta (Transferencia destino) {
+		return bd.buscaUsuario(destino);
 	}
 }

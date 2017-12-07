@@ -13,9 +13,11 @@ public interface IBDAO {
 	
 	void transferencia(Conta conta, Transferencia destino, String ocorrencia, String identificacao);
 	
-	void pagamento(Transferencia transferido, Conta conta, String identificacao);
+	void pagamento(Float valor, Conta conta, String identificacao);
 	
 	void recebeDados(Conta conta);
 	
 	List <Extrato> extrato (Conta conta);
+	
+	String buscaUsuario (Transferencia destino);
 }
