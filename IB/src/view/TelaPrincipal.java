@@ -127,6 +127,9 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelLogin = new JPanel();
 		painelLogin.add(lbLogin);
 		painelLogin.add(login);
+		
+		PlainDocument ajLogin = (PlainDocument) login.getDocument();
+		ajLogin.setDocumentFilter(new ajuste(50, "Text"));
 
 		JLabel lbSenha = new JLabel("Senha:");
 		lbSenha.setFont(fonte);
@@ -135,6 +138,9 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelSenha = new JPanel();
 		painelSenha.add(lbSenha);
 		painelSenha.add(senha);
+		
+		PlainDocument ajSenha = (PlainDocument) senha.getDocument();
+		ajSenha.setDocumentFilter(new ajuste(30, "Text"));
 
 		JButton btnLogin = new JButton("Login");
 		btnLogin.setFont(fonte);
@@ -226,6 +232,9 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelValor = new JPanel();
 		painelValor.add(lbValor);
 		painelValor.add(saldo);
+		
+		PlainDocument ajSaldo = (PlainDocument) saldo.getDocument();
+		ajSaldo.setDocumentFilter(new ajuste(12, "Float"));
 
 		JButton btnCadastro = new JButton("Cadastrar");
 		JButton btnVoltar = new JButton("Voltar");
@@ -416,6 +425,9 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelValor = new JPanel();
 		painelValor.add(lbValor);
 		painelValor.add(valorReceb);
+		
+		PlainDocument ajSaldo = (PlainDocument) valorReceb.getDocument();
+		ajSaldo.setDocumentFilter(new ajuste(12, "Float"));
 
 		JButton btnTransferir = new JButton("Transferir");
 		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
@@ -450,18 +462,27 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelCodigo = new JPanel();
 		painelCodigo.add(lbCodigo);
 		painelCodigo.add(codigoBarras);
+		
+		PlainDocument ajCod = (PlainDocument) identificacao.getDocument();
+		ajCod.setDocumentFilter(new ajuste(47, "Text"));
 
 		JLabel lbPagamento = new JLabel("Valor do Pagamento: ");
 		valorPagamento = new JTextField(10);
 		JPanel painelPagamento = new JPanel();
 		painelPagamento.add(lbPagamento);
 		painelPagamento.add(valorPagamento);
+		
+		PlainDocument ajPag = (PlainDocument) valorPagamento.getDocument();
+		ajPag.setDocumentFilter(new ajuste(12, "Float"));
 
 		JLabel lbIdent = new JLabel("Identificação: ");
 		identificacaoPagamento = new JTextArea(4, 20);
 		JPanel painelIden = new JPanel();
 		painelIden.add(lbIdent);
 		painelIden.add(identificacaoPagamento);
+		
+		PlainDocument ajId = (PlainDocument) identificacao.getDocument();
+		ajId.setDocumentFilter(new ajuste(200, "Text"));
 
 		JButton btnPagar = new JButton("Pagar");
 		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
@@ -493,7 +514,13 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		painelTel.add(lbTelefone);
 		painelTel.add(ddd);
 		painelTel.add(telefone);
-
+		
+		PlainDocument ajDdd = (PlainDocument) ddd.getDocument();
+		ajDdd.setDocumentFilter(new ajuste(2, "Int"));
+		
+		PlainDocument ajTel = (PlainDocument) telefone.getDocument();
+		ajTel.setDocumentFilter(new ajuste(9, "Int"));
+		
 		JLabel lbOperadora = new JLabel("Operadora: ");
 		valorOperadora = new JComboBox<String>();
 		valorOperadora.addItem("TIM");
