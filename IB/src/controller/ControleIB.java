@@ -33,4 +33,8 @@ public class ControleIB {
 	public String verificaConta (Transferencia destino) {
 		return bd.buscaUsuario(destino);
 	}
+	
+	public void realizarRecarga(Conta conta, String ocorrencia, Float valor) {
+		bd.recarga(conta, ocorrencia, valor);
+	}
 }

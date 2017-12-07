@@ -229,6 +229,7 @@ public class IBDAOImplementa implements IBDAO {
 		return temp;
 	}
 	
+	@Override
 	public String buscaUsuario (Transferencia destino) {
 		System.out.println(destino.getConta() + " - " + destino.getAgencia() + " - " +  destino.getCpf());
 		Connection conexao = DBUtil.getInstance().getConnection();
@@ -247,6 +248,36 @@ public class IBDAOImplementa implements IBDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public void recarga(Conta conta, String ocorrencia, Float valor) {
+		Connection conexao = DBUtil.getInstance().getConnection();
+		String pag = "UPDATE CLIENTE "
+		+ "SET SALDO = "+ conta.getSaldo()
+		+ " WHERE CPF = '" + conta.getCpf() +"'";
+		try {
+			PreparedStatement dados = conexao.prepareStatement(pag);
+			dados.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String ext = "INSERT INTO EXTRATO (DATAOCORRENCIA, OCORRENCIA, DESCRICAO, VALOR, AGENCIA, CONTA, CPF) VALUES "
+				+ "(GETDATE(), ?, NULL, ?, ?, ?, ?)";
+		try {
+			PreparedStatement dados = conexao.prepareStatement(ext);
+			dados.setString(1, ocorrencia);
+			dados.setFloat(2, valor);
+			dados.setString(3, conta.getAgencia());
+			dados.setString(4, conta.getConta());
+			dados.setString(5, conta.getCpf());
+			dados.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

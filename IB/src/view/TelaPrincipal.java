@@ -83,7 +83,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 	private JTextArea identificacaoPagamento;
 
 	private int clkConta;
-	private JComboBox valorOperadora;
+	private JComboBox operadora;
 	private JComboBox valorRecarga;
 
 	private boolean recarga = false;
@@ -127,7 +127,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelLogin = new JPanel();
 		painelLogin.add(lbLogin);
 		painelLogin.add(login);
-		
+
 		PlainDocument ajLogin = (PlainDocument) login.getDocument();
 		ajLogin.setDocumentFilter(new ajuste(50, "Text"));
 
@@ -138,7 +138,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelSenha = new JPanel();
 		painelSenha.add(lbSenha);
 		painelSenha.add(senha);
-		
+
 		PlainDocument ajSenha = (PlainDocument) senha.getDocument();
 		ajSenha.setDocumentFilter(new ajuste(30, "Text"));
 
@@ -232,7 +232,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelValor = new JPanel();
 		painelValor.add(lbValor);
 		painelValor.add(saldo);
-		
+
 		PlainDocument ajSaldo = (PlainDocument) saldo.getDocument();
 		ajSaldo.setDocumentFilter(new ajuste(12, "Float"));
 
@@ -425,7 +425,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelValor = new JPanel();
 		painelValor.add(lbValor);
 		painelValor.add(valorReceb);
-		
+
 		PlainDocument ajSaldo = (PlainDocument) valorReceb.getDocument();
 		ajSaldo.setDocumentFilter(new ajuste(12, "Float"));
 
@@ -450,7 +450,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JScrollPane scroll = new JScrollPane(dadosTransferencia);
 
 		telaTransferencia.add(painelSuperior(), BorderLayout.NORTH);
-		telaTransferencia.add(scroll, BorderLayout.CENTER);
+		telaTransferencia.add(dadosTransferencia, BorderLayout.CENTER);
 	}
 
 	public void telaPagamento() {
@@ -462,7 +462,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelCodigo = new JPanel();
 		painelCodigo.add(lbCodigo);
 		painelCodigo.add(codigoBarras);
-		
+
 		PlainDocument ajCod = (PlainDocument) identificacao.getDocument();
 		ajCod.setDocumentFilter(new ajuste(47, "Text"));
 
@@ -471,7 +471,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelPagamento = new JPanel();
 		painelPagamento.add(lbPagamento);
 		painelPagamento.add(valorPagamento);
-		
+
 		PlainDocument ajPag = (PlainDocument) valorPagamento.getDocument();
 		ajPag.setDocumentFilter(new ajuste(12, "Float"));
 
@@ -480,7 +480,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelIden = new JPanel();
 		painelIden.add(lbIdent);
 		painelIden.add(identificacaoPagamento);
-		
+
 		PlainDocument ajId = (PlainDocument) identificacao.getDocument();
 		ajId.setDocumentFilter(new ajuste(200, "Text"));
 
@@ -514,22 +514,22 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		painelTel.add(lbTelefone);
 		painelTel.add(ddd);
 		painelTel.add(telefone);
-		
+
 		PlainDocument ajDdd = (PlainDocument) ddd.getDocument();
 		ajDdd.setDocumentFilter(new ajuste(2, "Int"));
-		
+
 		PlainDocument ajTel = (PlainDocument) telefone.getDocument();
 		ajTel.setDocumentFilter(new ajuste(9, "Int"));
-		
+
 		JLabel lbOperadora = new JLabel("Operadora: ");
-		valorOperadora = new JComboBox<String>();
-		valorOperadora.addItem("TIM");
-		valorOperadora.addItem("Vivo");
-		valorOperadora.addItem("Claro");
-		valorOperadora.addItemListener(this);
+		operadora = new JComboBox<String>();
+		operadora.addItem("TIM");
+		operadora.addItem("Vivo");
+		operadora.addItem("Claro");
+		operadora.addItemListener(this);
 		JPanel painelOperadora = new JPanel();
 		painelOperadora.add(lbOperadora);
-		painelOperadora.add(valorOperadora);
+		painelOperadora.add(operadora);
 
 		JLabel lbPagamento = new JLabel("Valor da Recarga: ");
 		valorRecarga = new JComboBox<String>();
@@ -538,8 +538,8 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		JPanel painelPagamento = new JPanel();
 		painelPagamento.add(lbPagamento);
 		painelPagamento.add(valorRecarga);
-		
-		recargaValor(valorOperadora.getSelectedItem().toString());
+
+		recargaValor(operadora.getSelectedItem().toString());
 
 		JButton btnRecaregar = new JButton("Realizar Recarga");
 		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
@@ -552,6 +552,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		paineis.add(painelPagamento);
 		paineis.add(painelBotao);
 
+		btnRecaregar.addActionListener(this);
 		btnCancelar.addActionListener(this);
 
 		telaRecarga.add(painelSuperior(), BorderLayout.NORTH);
@@ -835,9 +836,27 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 			pagamentoCodigo();
 		}
 		if ("Realizar Recarga".equals(cmd)) {
-			
-		}
+			String rec = valorRecarga.getSelectedItem().toString();
+			String numberOnly = rec.replaceAll("[^0-9]", "");
 
+			Float valor = Float.parseFloat(numberOnly);
+			if (conta.getSaldo() - valor >= 0) {
+				int op = JOptionPane.showConfirmDialog(null, "DESEJA REALIZAR ESTA RECARGA?");
+				if (op == 0) {
+					
+					String ocorrencia;
+					ocorrencia = "Recarga " + operadora.getSelectedItem().toString() + " - "
+							+ valorRecarga.getSelectedItem().toString();
+
+					conta.setSaldo(conta.getSaldo() - valor);
+
+					controle.realizarRecarga(conta, ocorrencia, valor);
+					JOptionPane.showMessageDialog(null, "RECARGA REALIZADA COM SUCESSO!");
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "SALDO INSUFICIENTE PARA ESTA OPERAÇÃO");
+			}
+		}
 	}
 
 	@Override
@@ -846,7 +865,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		// String cmd = e.getItemSelectable().toString();
 		// System.out.println(cmd);
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			String cbxItem = (String) valorOperadora.getSelectedItem();
+			String cbxItem = (String) operadora.getSelectedItem();
 			switch (cbxItem) {
 			case "TIM":
 				recargaValor(cbxItem);
@@ -861,7 +880,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		}
 	}
 
-	// AJUSTA TEXTO
+	// AJUSTA E LIMITA TEXTO DOS TEXTFIELD
 
 	class ajuste extends DocumentFilter {
 
@@ -919,7 +938,6 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 					return false;
 				}
 			}
-
 			return false;
 		}
 

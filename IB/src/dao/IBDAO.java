@@ -20,4 +20,6 @@ public interface IBDAO {
 	List <Extrato> extrato (Conta conta);
 	
 	String buscaUsuario (Transferencia destino);
+	
+	void recarga(Conta conta, String ocorrencia, Float valor);
 }
