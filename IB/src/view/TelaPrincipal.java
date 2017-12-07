@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -41,7 +43,7 @@ import controller.lstExtrato;
 import model.Conta;
 import model.Transferencia;
 
-public class TelaPrincipal implements ActionListener {
+public class TelaPrincipal implements ActionListener, ItemListener {
 	private static TelaPrincipal tela = new TelaPrincipal();
 	private static JFrame janela;
 	private static JPanel telaLogin;
@@ -81,6 +83,10 @@ public class TelaPrincipal implements ActionListener {
 	private JTextArea identificacaoPagamento;
 
 	private int clkConta;
+	private JComboBox valorOperadora;
+	private JComboBox valorRecarga;
+
+	private boolean recarga = false;
 
 	public void icon() {
 		URL link = getClass().getResource("./coin.png");
@@ -489,23 +495,24 @@ public class TelaPrincipal implements ActionListener {
 		painelTel.add(telefone);
 
 		JLabel lbOperadora = new JLabel("Operadora: ");
-		JComboBox valorOperadora = new JComboBox<String>();
+		valorOperadora = new JComboBox<String>();
 		valorOperadora.addItem("TIM");
 		valorOperadora.addItem("Vivo");
 		valorOperadora.addItem("Claro");
+		valorOperadora.addItemListener(this);
 		JPanel painelOperadora = new JPanel();
 		painelOperadora.add(lbOperadora);
 		painelOperadora.add(valorOperadora);
 
-		JLabel lbPagamento = new JLabel("Valor do Pagamento: ");
-		JComboBox valorPagamento = new JComboBox<String>();
+		JLabel lbPagamento = new JLabel("Valor da Recarga: ");
+		valorRecarga = new JComboBox<String>();
 
-		// CORRIGIR COMBOBOX
-		valorPagamento.addItem(recargaValor((String) valorOperadora.getSelectedItem()));
-		valorPagamento.addActionListener(this);
+		valorRecarga.addActionListener(this);
 		JPanel painelPagamento = new JPanel();
 		painelPagamento.add(lbPagamento);
-		painelPagamento.add(valorPagamento);
+		painelPagamento.add(valorRecarga);
+		
+		recargaValor(valorOperadora.getSelectedItem().toString());
 
 		JButton btnRecaregar = new JButton("Realizar Recarga");
 		JButton btnCancelar = new JButton("Cancelar e Voltar ao Menu");
@@ -524,30 +531,32 @@ public class TelaPrincipal implements ActionListener {
 		telaRecarga.add(paineis, BorderLayout.CENTER);
 	}
 
-	public JComboBox<String> recargaValor(String op) {
-		System.out.println(op);
-		JComboBox valores = new JComboBox<String>();
+	public void recargaValor(String op) {
+		valorRecarga.removeAllItems();
 		if ("TIM".equals(op)) {
-			valores.addItem("R$ 15");
-			valores.addItem("R$ 18");
-			valores.addItem("R$ 20");
-			valores.addItem("R$ 30");
-			valores.addItem("R$ 50");
+			valorRecarga.addItem("R$ 15");
+			valorRecarga.addItem("R$ 18");
+			valorRecarga.addItem("R$ 20");
+			valorRecarga.addItem("R$ 30");
+			valorRecarga.addItem("R$ 50");
+			valorRecarga.addItem("R$ 100");
 		} else if ("Vivo".equals(op)) {
-			valores.addItem("R$ 15");
-			valores.addItem("R$ 20");
-			valores.addItem("R$ 30");
-			valores.addItem("R$ 50");
-			valores.addItem("R$ 100");
+			valorRecarga.addItem("R$ 15");
+			valorRecarga.addItem("R$ 20");
+			valorRecarga.addItem("R$ 30");
+			valorRecarga.addItem("R$ 50");
+			valorRecarga.addItem("R$ 100");
 		} else if ("Claro".equals(op)) {
-			valores.addItem("R$ 12");
-			valores.addItem("R$ 20");
-			valores.addItem("R$ 25");
-			valores.addItem("R$ 40");
-			valores.addItem("R$ 50");
-			valores.addItem("R$ 100");
+			valorRecarga.addItem("R$ 12");
+			valorRecarga.addItem("R$ 20");
+			valorRecarga.addItem("R$ 25");
+			valorRecarga.addItem("R$ 40");
+			valorRecarga.addItem("R$ 50");
+			valorRecarga.addItem("R$ 100");
 		}
-		return valores;
+		valorRecarga.invalidate();
+		valorRecarga.repaint();
+		valorRecarga.repaint();
 	}
 
 	public void telaExtrato() {
@@ -768,6 +777,7 @@ public class TelaPrincipal implements ActionListener {
 			telaEscolha.setVisible(false);
 			janela.setContentPane(telaRecarga);
 			telaRecarga.setVisible(true);
+			recarga = true;
 		} else if ("Extrato".equals(cmd)) {
 			listaExtrato.verExtrato(conta);
 			telaExtrato();
@@ -789,12 +799,38 @@ public class TelaPrincipal implements ActionListener {
 			telaCadastro.setVisible(false);
 			janela.setContentPane(telaLogin);
 			telaLogin.setVisible(true);
+			recarga = false;
 		}
 		if ("Transferir".equals(cmd)) {
 			transferenciaConta();
 		}
 		if ("Pagar".equals(cmd)) {
 			pagamentoCodigo();
+		}
+		if ("Realizar Recarga".equals(cmd)) {
+			
+		}
+
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		// String cmd = e.getItemSelectable().toString();
+		// System.out.println(cmd);
+		if (e.getStateChange() == ItemEvent.SELECTED) {
+			String cbxItem = (String) valorOperadora.getSelectedItem();
+			switch (cbxItem) {
+			case "TIM":
+				recargaValor(cbxItem);
+				break;
+			case "Vivo":
+				recargaValor(cbxItem);
+				break;
+			case "Claro":
+				recargaValor(cbxItem);
+				break;
+			}
 		}
 	}
 
