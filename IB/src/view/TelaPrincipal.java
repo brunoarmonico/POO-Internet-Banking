@@ -463,7 +463,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		painelCodigo.add(lbCodigo);
 		painelCodigo.add(codigoBarras);
 
-		PlainDocument ajCod = (PlainDocument) identificacao.getDocument();
+		PlainDocument ajCod = (PlainDocument) codigoBarras.getDocument();
 		ajCod.setDocumentFilter(new ajuste(47, "Text"));
 
 		JLabel lbPagamento = new JLabel("Valor do Pagamento: ");
@@ -481,7 +481,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		painelIden.add(lbIdent);
 		painelIden.add(identificacaoPagamento);
 
-		PlainDocument ajId = (PlainDocument) identificacao.getDocument();
+		PlainDocument ajId = (PlainDocument) identificacaoPagamento.getDocument();
 		ajId.setDocumentFilter(new ajuste(200, "Text"));
 
 		JButton btnPagar = new JButton("Pagar");
@@ -954,7 +954,6 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 			} else {
 				// warn the user and don't allow the insert
 			}
-
 		}
 
 		@Override

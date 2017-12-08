@@ -19,8 +19,11 @@ SISTEMA SIMULADOR DE INTERNET BANKING
     - Exibe todas as movimentações de valores na conta.
     
   - Pagamento
-    - Não é necessario um codigo de barras valido para isso, apenas uma numeração qualquer ja serve, o valor é a prioridade para depois ser adicionado no extrato.
+    - Não é necessario um codigo de barras valido para isso, apenas uma numeração qualquer ja serve, o valor é necessario para depois ser adicionado no extrato.
     
   - Recarga
     - Requisitos similares ao pagamento.
     
+- Os campos de Identificação, servem para adicionar uma descrição a transação.
+	
+Qualquer problema, envie um e-mail para bruno.csarmonico@outlook.com

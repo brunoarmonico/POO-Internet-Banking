@@ -42,7 +42,7 @@ public class IBDAOImplementa implements IBDAO {
 		}
 
 	}
-
+	
 	@Override
 	public void primeiroAcesso(Conta conta) {
 		// TODO Auto-generated method stub
@@ -58,7 +58,14 @@ public class IBDAOImplementa implements IBDAO {
 			dados.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			if (e.toString().contains("Violation of PRIMARY KEY")) {
+				JOptionPane.showMessageDialog(null, "CPF JA CADASTRADO");
+				return;
+			}
+			else {
+				e.printStackTrace();
+			}
 			return;
 		}
 
