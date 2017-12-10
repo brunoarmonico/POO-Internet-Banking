@@ -25,5 +25,6 @@ SISTEMA SIMULADOR DE INTERNET BANKING
     - Requisitos similares ao pagamento.
     
 - Os campos de Identificação, servem para adicionar uma descrição a transação.
+- Em alguns campos não é possivel apagar completamente o conteudo, para isso deve se selecionar o conteudo do campo e sobreescrever com o conteudo desejado.
 	
 Qualquer problema, envie um e-mail para bruno.csarmonico@outlook.com
