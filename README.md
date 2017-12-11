@@ -3,6 +3,7 @@ SISTEMA SIMULADOR DE INTERNET BANKING
 *---- AVISO ----*
 
 - Para utilizar este Sistema é necessario JAVA 8/JRE 1.8.0 e IDE Eclipse, de preferencia distribuição NEON ou superior.
+Com o Eclipse aberto vá em File > Import > General > Projects from Folder or Archive, use o botão "Directory" e escolha a pasta "IB" que esta junto a outras pastas baixadas deste git.
 - É necessario conexão com a internet para usar este Sistema.
 - Para evitar que os avaliadores deste trabalho tenham que instalar e/ou criar Bancos de Dados, a parte de BD deste software fica em um servidor do azure.
 - Observem que por estar em um servidor Azure qualquer um pode ver o que foi inserido no banco, por isso não utilizem dados reais ou que possam lhe compremeter enquanto usa este Sistema, eu estarei observando as movimentações no banco de dados durante o periodo de avaliação para evitar problemas.
