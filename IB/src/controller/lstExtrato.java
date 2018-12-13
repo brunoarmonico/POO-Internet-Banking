@@ -10,12 +10,14 @@ import dao.IBDAOImplementa;
 import model.Conta;
 import model.Extrato;
 
+//Gerencia tabela de extrato
+
 public class lstExtrato implements TableModel {
 	private List<Extrato> lista = new ArrayList<Extrato>();
-	private IBDAOImplementa bd = new IBDAOImplementa();
+	private IBDAOImplementa dao = new IBDAOImplementa();
 
 	public List<Extrato> verExtrato(Conta conta) {
-		List<Extrato> tabela = bd.extrato(conta);
+		List<Extrato> tabela = dao.extrato(conta);
 		this.lista = tabela;
 		return tabela;
 	}

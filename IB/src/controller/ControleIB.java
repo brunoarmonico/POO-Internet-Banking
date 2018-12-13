@@ -6,11 +6,11 @@ import model.Extrato;
 import model.Transferencia;
 
 public class ControleIB {
-	private static IBDAOImplementa bd = new IBDAOImplementa();
+	private static IBDAOImplementa dao = new IBDAOImplementa();
 	private static Conta conta = new Conta();
 
 	public void criarConta(Conta conta) {
-		bd.primeiroAcesso(conta);
+		dao.primeiroAcesso(conta);
 		return;
 	}
 	
@@ -19,22 +19,22 @@ public class ControleIB {
 	}
 	
 	public boolean acessoConta(Conta dados) {
-		return bd.consultaLogin(dados);
+		return dao.consultaLogin(dados);
 	}
 	
 	public void transferirValor(Conta conta, Transferencia destino, String ocorrencia, String identificacao) {
-		bd.transferencia(conta, destino, ocorrencia, identificacao);
+		dao.transferencia(conta, destino, ocorrencia, identificacao);
 	}
 	
 	public void pagarConta(Float valor, Conta conta, String identificacao) {
-		bd.pagamento(valor, conta, identificacao);
+		dao.pagamento(valor, conta, identificacao);
 	}
 	
 	public String verificaConta (Transferencia destino) {
-		return bd.buscaUsuario(destino);
+		return dao.buscaUsuario(destino);
 	}
 	
 	public void realizarRecarga(Conta conta, String ocorrencia, Float valor) {
-		bd.recarga(conta, ocorrencia, valor);
+		dao.recarga(conta, ocorrencia, valor);
 	}
 }

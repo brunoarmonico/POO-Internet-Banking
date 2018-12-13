@@ -4,16 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;  
 
+
+//Conexão com o SQL Server
 public class DBUtil {
 	private static DBUtil instancia;
-	private Connection con;
-
+	private Connection conexao;
+	
 	private DBUtil() {
 		try {
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//			con = DriverManager.getConnection("jdbc:sqlserver://hueinternetbanking.database.windows.net;database=BancoHUE;user=teste;password=Ib12345!");
 			Class.forName("net.sourceforge.jtds.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:jtds:sqlserver://hueinternetbanking.database.windows.net:1433;DatabaseName=BancoHUE;namedPipes=true;user=teste;password=Ib12345!");
+			conexao = DriverManager.getConnection("LINK REMOVIDO");
 			System.out.println("Logado no Azure");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -30,6 +30,6 @@ public class DBUtil {
 	}
 
 	public Connection getConnection() {
-		return con;
+		return conexao;
 	}
 }

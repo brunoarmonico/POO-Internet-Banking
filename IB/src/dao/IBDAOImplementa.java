@@ -15,6 +15,7 @@ import model.Transferencia;
 
 public class IBDAOImplementa implements IBDAO {
 
+	//verificar dados de login
 	@Override
 	public boolean consultaLogin(Conta conta) {
 		Connection conexao = DBUtil.getInstance().getConnection();
@@ -24,28 +25,27 @@ public class IBDAOImplementa implements IBDAO {
 			PreparedStatement dados = conexao.prepareStatement(sql);
 
 			ResultSet resultado = dados.executeQuery();
-			String x = null;
+			String recebido = null;
 			while (resultado.next()) {
-				x = resultado.getString("CPF");
+				recebido = resultado.getString("CPF");
 			}
-			if (x != null) {
-				conta.setCpf(x);
+			if (recebido != null) {
+				conta.setCpf(recebido);
 				recebeDados(conta);
 				return true;
 			} else {
 				return false;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
 
 	}
 	
+	//adicionar cliente no banco de dados	
 	@Override
 	public void primeiroAcesso(Conta conta) {
-		// TODO Auto-generated method stub
 		Connection conexao = DBUtil.getInstance().getConnection();
 		String acc = "INSERT INTO CLIENTE( CPF, NOME, AGENCIA, CONTA, SALDO) VALUES" + "(?, ?, ?, ?, ?)";
 		try {
@@ -57,8 +57,6 @@ public class IBDAOImplementa implements IBDAO {
 			dados.setFloat(5, conta.getSaldo());
 			dados.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			
 			if (e.toString().contains("Violation of PRIMARY KEY")) {
 				JOptionPane.showMessageDialog(null, "CPF JA CADASTRADO");
 				return;
@@ -77,16 +75,15 @@ public class IBDAOImplementa implements IBDAO {
 			dados.setString(3, conta.getCpf());
 			dados.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
 		JOptionPane.showMessageDialog(null, "USUARIO CADASTRADO!");
 	}
 
+	//adicionar transferencia no extrato
 	@Override
 	public void transferencia(Conta conta, Transferencia destino, String ocorrencia, String identificacao) {
-		// TODO Auto-generated method stub
 		Connection conexao = DBUtil.getInstance().getConnection();
 
 		String tra = "INSERT INTO EXTRATO(DATAOCORRENCIA, OCORRENCIA, DESCRICAO, VALOR, AGENCIA, CONTA, CPF) VALUES"
@@ -102,7 +99,6 @@ public class IBDAOImplementa implements IBDAO {
 			dados.setString(6, destino.getCpf());
 			dados.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
@@ -118,7 +114,6 @@ public class IBDAOImplementa implements IBDAO {
 			dados.setString(6, conta.getCpf());
 			dados.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
@@ -130,7 +125,6 @@ public class IBDAOImplementa implements IBDAO {
 			PreparedStatement dados = conexao.prepareStatement(upd1);
 			dados.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -142,16 +136,15 @@ public class IBDAOImplementa implements IBDAO {
 			PreparedStatement dados = conexao.prepareStatement(upd2);
 			dados.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		JOptionPane.showMessageDialog(null, "TRANSFERENCIA CONCLUIDA COM SUCESSO!");
 	}
 
+	//realizar pagamento
 	@Override
 	public void pagamento(Float valor, Conta conta, String identificacao) {
-		// TODO Auto-generated method stub
 		Connection conexao = DBUtil.getInstance().getConnection();
 		String pag = "UPDATE CLIENTE "
 		+ "SET SALDO = "+ conta.getSaldo()
@@ -160,7 +153,6 @@ public class IBDAOImplementa implements IBDAO {
 			PreparedStatement dados = conexao.prepareStatement(pag);
 			dados.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -175,38 +167,33 @@ public class IBDAOImplementa implements IBDAO {
 			dados.setString(5, conta.getCpf());
 			dados.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	//recebe dados do cliente por cpf
 	@Override
 	public void recebeDados(Conta conta) {
-		// TODO Auto-generated method stub
 		Connection conexao = DBUtil.getInstance().getConnection();
 		String sql = "SELECT * FROM CLIENTE " + "WHERE CPF = '" + conta.getCpf() + "'";
 		try {
 			PreparedStatement dados = conexao.prepareStatement(sql);
 			ResultSet resultado = dados.executeQuery();
-
 			while (resultado.next()) {
 				conta.setNome(resultado.getString("nome"));
 				conta.setCpf(resultado.getString("cpf"));
 				conta.setSaldo(resultado.getFloat("saldo"));
 				conta.setAgencia(resultado.getString("agencia"));
 				conta.setConta(resultado.getString("conta"));
-
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	//recebe extrato do cliente
 	@Override
 	public List<Extrato> extrato(Conta conta) {
-		// TODO Auto-generated method stub
-
 		Connection conexao = DBUtil.getInstance().getConnection();
 		String ext = "SELECT * FROM EXTRATO " + "WHERE CPF = '" + conta.getCpf() + "'";
 
@@ -236,6 +223,7 @@ public class IBDAOImplementa implements IBDAO {
 		return temp;
 	}
 	
+	//busca nome do clente
 	@Override
 	public String buscaUsuario (Transferencia destino) {
 		System.out.println(destino.getConta() + " - " + destino.getAgencia() + " - " +  destino.getCpf());
@@ -257,6 +245,7 @@ public class IBDAOImplementa implements IBDAO {
 		return null;
 	}
 	
+	//realiza recarga e atualiza saldo
 	@Override
 	public void recarga(Conta conta, String ocorrencia, Float valor) {
 		Connection conexao = DBUtil.getInstance().getConnection();

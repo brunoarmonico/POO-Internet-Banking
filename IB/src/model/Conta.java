@@ -9,6 +9,7 @@ public class Conta {
 	private String conta;
 	private float saldo;
 	
+	//calcula se saldo é suficiente para a operação
 	public boolean modificaSaldo(Float valor) {
 		if (saldo - valor < 0) {
 			return false;

@@ -6,6 +6,7 @@ public class Transferencia {
 	private String agencia;
 	private String conta;
 	private float valor;
+	
 	public String getNome() {
 		return nome;
 	}

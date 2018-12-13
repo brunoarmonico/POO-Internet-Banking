@@ -88,12 +88,14 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 
 	private boolean recarga = false;
 
+	//adiciona icone do programa
 	public void icon() {
 		URL link = getClass().getResource("./coin.png");
 		ImageIcon icn = new ImageIcon(link);
 		janela.setIconImage(icn.getImage());
 	}
 
+	//modulo de inicialização com configurações da janela
 	public static void main(String[] args) {
 		janela = new JFrame("Banco do HUE");
 		tela.icon();
@@ -113,6 +115,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	//tela de login
 	public void telaLogin() {
 		telaLogin = new JPanel(new GridLayout(3, 1));
 
@@ -161,9 +164,9 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 
 		btnLogin.addActionListener(this);
 		btnCadastro.addActionListener(this);
-
 	}
 
+	//tela de cadastro do cliente
 	public void telaCadastro() {
 		telaCadastro = new JPanel();
 
@@ -248,8 +251,6 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		dadosLogin.add(painelSenha);
 		dadosLogin.add(painelCpf);
 		dadosLogin.add(painelBanco);
-		// dadosLogin.add(painelAgencia);
-		// dadosLogin.add(painelConta);
 		dadosLogin.add(painelValor);
 		dadosLogin.add(painelBotao);
 
@@ -261,6 +262,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		btnVoltar.addActionListener(this);
 	}
 
+	//tela principal com opções de operações
 	public void telaEscolha() {
 		telaEscolha = new JPanel(new BorderLayout());
 
@@ -350,6 +352,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		telaEscolha.add(painelGeral, BorderLayout.CENTER);
 	}
 
+	//tela de transferencia entre contas
 	public void telaTransferencia() {
 		telaTransferencia = new JPanel(new BorderLayout());
 
@@ -418,9 +421,6 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		ajId.setDocumentFilter(new ajuste(200, "Text"));
 
 		JLabel lbValor = new JLabel("Valor: ");
-		// NumberFormatter valorFormatado = new NumberFormatter();
-		// valorReceb = new JFormattedTextField(valorFormatado);
-		// valorReceb.setColumns(10);
 		valorReceb = new JTextField(10);
 		JPanel painelValor = new JPanel();
 		painelValor.add(lbValor);
@@ -453,6 +453,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		telaTransferencia.add(dadosTransferencia, BorderLayout.CENTER);
 	}
 
+	//tela de pagamento de contas
 	public void telaPagamento() {
 		telaPagamento = new JPanel(new BorderLayout());
 
@@ -502,6 +503,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		telaPagamento.add(paineis, BorderLayout.CENTER);
 	}
 
+	//tela de recarga de celulares
 	public void telaRecarga() {
 		telaRecarga = new JPanel(new BorderLayout());
 
@@ -559,6 +561,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		telaRecarga.add(paineis, BorderLayout.CENTER);
 	}
 
+	//valores de recarga por operadora
 	public void recargaValor(String op) {
 		valorRecarga.removeAllItems();
 		if ("TIM".equals(op)) {
@@ -587,6 +590,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		valorRecarga.repaint();
 	}
 
+	//tela de extrato
 	public void telaExtrato() {
 		telaExtrato = new JPanel(new BorderLayout());
 
@@ -615,6 +619,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		telaExtrato.add(painelExtrato, BorderLayout.CENTER);
 	}
 
+	//painel superior da tela com dados do usuario logado
 	public JPanel painelSuperior() {
 		JLabel imagem = new JLabel(new ImageIcon(adjustaImagem(100, 100)));
 
@@ -642,6 +647,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		return painelSuperior;
 	}
 
+	//procedimento de login
 	public boolean fazerLogin() {
 		conta.setLogin(login.getText());
 		String pass = new String(senha.getPassword());
@@ -649,6 +655,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		return controle.acessoConta(conta);
 	}
 
+	//procedimento de criação de conta
 	public void adicionarConta() {
 		if (nome.getText().isEmpty() || login.getText().isEmpty() || cpf.getText().isEmpty()
 				|| agencia.getText().isEmpty() || nconta.getText().isEmpty()) {
@@ -670,6 +677,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		}
 	}
 
+	//procedimento de transferencia entre contas
 	public void transferenciaConta() {
 		Transferencia destino = new Transferencia();
 		if (agenciaReceb.getText().isEmpty() || contaReceb.getText().isEmpty() || cpfReceb.getText().isEmpty()) {
@@ -718,6 +726,7 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		}
 	}
 
+	//procedimento de pagamento por codigo
 	public void pagamentoCodigo() {
 		if (Float.parseFloat(valorPagamento.getText()) <= 0) {
 			JOptionPane.showMessageDialog(null, "VALOR DE PAGAMENTO INVALIDO");
@@ -734,12 +743,12 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		}
 	}
 
+	//procedimento para gerar imagem de logo
 	public BufferedImage adjustaImagem(int w, int h) {
 		BufferedImage bufImagem = null;
 		try {
 			bufImagem = ImageIO.read(getClass().getResource("./coin.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -752,9 +761,9 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		return imgSize;
 	}
 
+	//procedimento de ação em botões
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		// TODO Auto-generated method stub
 		String cmd = event.getActionCommand();
 		if ("Login".equals(cmd)) {
 			boolean aprovado = fazerLogin();
@@ -859,11 +868,9 @@ public class TelaPrincipal implements ActionListener, ItemListener {
 		}
 	}
 
+	//procedimento de alteração de valores na combobox de recarga
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		// String cmd = e.getItemSelectable().toString();
-		// System.out.println(cmd);
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			String cbxItem = (String) operadora.getSelectedItem();
 			switch (cbxItem) {
